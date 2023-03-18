@@ -55,11 +55,4 @@ if __name__ == "__main__":
  
     #equation = bar(total,num,size)
 
-   
 
-
-# run the output through this: https://latex2image.joeraut.com/
-# each line of output corresponds to one instance, what needs to be fixed is replacing
-# the "print(texStr)" with a function call that does what the website is doing. The library
-# here: https://pypi.org/project/pnglatex/ claims to do this, but I am having environment 
-# path errors with my latex and cant get it working.
