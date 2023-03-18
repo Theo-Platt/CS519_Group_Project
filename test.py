@@ -111,8 +111,9 @@ if __name__ == "__main__":
 
     # characters
     chars= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    chars.extend(x.upper() for x in chars)
-    print()
+    temp = list(x.upper() for x in chars)
+    chars.extend(temp)
+   
     for char in chars:
         path = CHAR_PATH / f'char_{char}.png'
         with open(path, 'wb') as outputfile:
