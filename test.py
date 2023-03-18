@@ -16,6 +16,12 @@ size=300 # number of instances to make
 
 from sympy.utilities.misc import find_executable
 
+from pnglatex import pnglatex
+
+# use this library to generate path that will work in both windows and linux
+# https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
+from pathlib import Path
+
 # create all permutations of allowed symbols for { problems of size 2, 3, or 4.
 def foo(arr,n_items):
     if n_items == 2:
@@ -30,7 +36,7 @@ def foo(arr,n_items):
                 texStr += "      "+str(b)+"\\\\"
                 texStr += "\\end{array} "
                 texStr += "\\right. "
-                print(texStr)
+                #print(texStr)
 
     if n_items == 3:
         pass
@@ -47,7 +53,7 @@ def foo(arr,n_items):
                 texStr += "      "+str(c)+"\\\\"
                 texStr += "\\end{array} "
                 texStr += "\\right. "
-                print(texStr)
+                #print(texStr)
 
     for a in arr:
         for b in arr:
@@ -64,7 +70,7 @@ def foo(arr,n_items):
                     texStr += "      "+str(d)+"\\\\"
                     texStr += "\\end{array} "
                     texStr += "\\right. "
-                    print(texStr)
+                    #print(texStr)
 
     
 
@@ -86,20 +92,28 @@ def bar(arr,n_items, sampleSize = 300):
         # print("\\]")
 
         # preview(texStr,viewer='file',filename='test.png')
-        print(texStr)
+        #print(texStr)
+        return texStr
+
 
 
 if __name__ == "__main__":
-    print(find_executable('latex'))
+    #print(find_executable('latex'))
     nums = ['0','1','2','3','4','5','6','7','8','9']
+    for num in nums:
+        with open(f'num_{num}.png', 'wb') as outputfile:
+            preview(num, viewer='BytesIO', outputbuffer=outputfile)
+
     chars= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
     total= ['(','+','-']
     total.extend(nums)
     total.extend(chars)
     total.extend(x.upper() for x in chars)
-    # print(total)
+    
+    #equation = bar(total,num,size)
 
-    bar(total,num,size)
+   
+
 
 # run the output through this: https://latex2image.joeraut.com/
 # each line of output corresponds to one instance, what needs to be fixed is replacing
