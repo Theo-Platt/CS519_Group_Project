@@ -214,12 +214,12 @@ if __name__ == "__main__":
 
         # write data to csv
         # source: https://www.geeksforgeeks.org/python-save-list-to-csv/
-        with open('dataset.csv', 'w') as f:
+        with open('./data/dataset/dataset/dataset.csv', 'w') as f:
             # using csv.writer method from CSV package
             write = csv.writer(f)
             write.writerows(dataset)
             f.close()
-        f = open("keys.csv", 'w')
+        f = open("./data/dataset/dataset/keys.csv", 'w')
         for key in classes:
             f.write(str(key)+',')
 
