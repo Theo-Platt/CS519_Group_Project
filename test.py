@@ -95,20 +95,37 @@ def bar(arr,n_items, sampleSize = 300):
         #print(texStr)
         return texStr
 
+NUM_PATH = Path("./data/nums")
+CHAR_PATH = Path("./data/chars")
 
 
 if __name__ == "__main__":
     #print(find_executable('latex'))
+    # numbers
     nums = ['0','1','2','3','4','5','6','7','8','9']
     for num in nums:
-        with open(f'num_{num}.png', 'wb') as outputfile:
+        path = NUM_PATH / f'num_{num}.png'
+        with open(path, 'wb') as outputfile:
             preview(num, viewer='BytesIO', outputbuffer=outputfile)
+    print("finished generating num pictures")
 
+    # characters
     chars= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-    total= ['(','+','-']
+    chars.extend(x.upper() for x in chars)
+    print()
+    for char in chars:
+        path = CHAR_PATH / f'char_{char}.png'
+        with open(path, 'wb') as outputfile:
+            preview(char, viewer='BytesIO', outputbuffer=outputfile)
+    print("finished generating characters")
+
+
+    operators= ['(','+','-']
+    
+    total = []
     total.extend(nums)
     total.extend(chars)
-    total.extend(x.upper() for x in chars)
+    total.extend(operators)
     
     #equation = bar(total,num,size)
 
