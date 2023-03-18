@@ -120,7 +120,6 @@ if __name__ == "__main__":
             preview(char, viewer='BytesIO', outputbuffer=outputfile)
     print("finished generating characters")
 
-
     operators= ['(','+','-']
     
     total = []
