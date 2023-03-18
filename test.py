@@ -33,6 +33,7 @@ def foo(arr,n_items):
                 print(texStr)
 
     if n_items == 3:
+        pass
     for a in arr:
         for b in arr:
             for c in arr:
@@ -52,18 +53,18 @@ def foo(arr,n_items):
         for b in arr:
             for c in arr:
                 for d in arr:
-                foo = random.sample(arr,n_items)
-                # print("\\[")
-                texStr = ""
-                texStr += "   \\left\\{"
-                texStr += "\\begin{array}{ll}"
-                texStr += "      "+str(a)+"\\\\"
-                texStr += "      "+str(b)+"\\\\"
-                texStr += "      "+str(c)+"\\\\"
-                texStr += "      "+str(d)+"\\\\"
-                texStr += "\\end{array} "
-                texStr += "\\right. "
-                print(texStr)
+                    foo = random.sample(arr,n_items)
+                    # print("\\[")
+                    texStr = ""
+                    texStr += "   \\left\\{"
+                    texStr += "\\begin{array}{ll}"
+                    texStr += "      "+str(a)+"\\\\"
+                    texStr += "      "+str(b)+"\\\\"
+                    texStr += "      "+str(c)+"\\\\"
+                    texStr += "      "+str(d)+"\\\\"
+                    texStr += "\\end{array} "
+                    texStr += "\\right. "
+                    print(texStr)
 
     
 
