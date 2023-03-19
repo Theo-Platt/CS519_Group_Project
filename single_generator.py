@@ -133,7 +133,7 @@ if __name__ == "__main__":
     
     # save
     print(f"Saving to {save_file_name}...")
-    with open(f'./data/dataset/dataset/{save_file_name}', 'w') as f:
+    with open(f'./data/{save_file_name}', 'w') as f:
             # using csv.writer method from CSV package
             write = csv.writer(f)
             write.writerows(dataset)
