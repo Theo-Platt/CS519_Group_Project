@@ -1,17 +1,32 @@
+# CS 519 M01
+# Project Stage 3 - Piecewise Dataset Generator
+# Authors: Theoderic Platt, Long Tran
+# Purpose: Generates the desired number of png images of piecewise 
+#          functions using random characters, digits, or operators. 
+#          The data is then formatted to 100x100 pixels in size and 
+#          stored as pixel data in a dataset.csv found in the 
+#          /data/dataset/dataset directory. A keys.csv is generated 
+#          in the same directory, such that the first instance of 
+#          dataset.csv is of the class of the first instance in 
+#          keys.csv and so on.
 
+
+#imports
 import imageio.v3 as iio
-import csv
+import numpy      as np
 import random
-from random import randint
-from sys import argv
-from sympy import *
+import csv
 import cv2
-import numpy as np
 from sympy.utilities.misc import find_executable
-from pnglatex import pnglatex
+from pnglatex             import pnglatex
+from random               import randint
+from pathlib              import Path
+from sys                  import argv
+from sympy                import *
+
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
-from pathlib import Path
+
 
 
 NUM_PATH = Path("./data/nums")
@@ -29,8 +44,7 @@ disableP3 = False
 disableP4 = False
 debug = False
 
-# number of instances to make
-size=5 
+
 
 
 
@@ -85,8 +99,8 @@ def foo(arr,n_items):
                     #print(texStr)
 
 #resize images to 100x100 pixels with generated image in upper left corner
-def resize_all(size=size, data=-1):
-    if data==-1:
+def resize_all(size=-1, data=-1):
+    if data==-1 or size==-1:
         print("improper use of resize_all function. data parameter must be supplied.")
         exit(1)
     #Source: https://stackoverflow.com/questions/61379067/adding-two-different-sized-images-or-padding-white-pixels-to-make-it-to-bigger-s
@@ -114,6 +128,7 @@ def bar(arr,n_items, sampleSize = 300):
         print("n_iter = "+str(n_items))
         exit(1)
     equationList = []
+    #generate functions
     for j in range(sampleSize):
         foo = random.sample(arr,n_items)
         texStr = ""
@@ -126,12 +141,15 @@ def bar(arr,n_items, sampleSize = 300):
         texStr += "\\right. "
         texStr += "\\]"
         equationList.append(texStr)
+    #generate png from functions
     counter = 0
     for equation in equationList:
         path = DATA_PATH[n_items-2] / f'P{n_items}_{counter}.png'
         counter+=1
         with open(path, 'wb') as outputfile:
             preview(str(equation), viewer='BytesIO', outputbuffer=outputfile)
+    # resize all images to 100 x 100 pixel
+    resize_all(data = n_items, size=sampleSize)
     print("finished generating piecewise functions height: "+str(n_items))
 
 
@@ -180,11 +198,6 @@ if __name__ == "__main__":
     if not disableP2: bar(total,2,size)
     if not disableP3: bar(total,3,size)
     if not disableP4: bar(total,4,size)
-
-    # resize all images to 100 x 100 pixel
-    if not disableP2: resize_all(data = 2)
-    if not disableP2: resize_all(data = 3)
-    if not disableP2: resize_all(data = 4)
 
     # create actual dataset (only if all data was generated, b/c im lazy.)
     if not disableP2 and not disableP3 and not disableP4:
