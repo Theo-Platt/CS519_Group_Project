@@ -11,26 +11,23 @@
 #          keys.csv and so on.
 
 
-#imports
+# imports
 import imageio.v3 as iio
 import numpy      as np
 import random
 import csv
 import cv2
+import os
 from sympy.utilities.misc import find_executable
 from pnglatex             import pnglatex
 from random               import randint
-from pathlib              import Path
+from pathlib              import Path             # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
 from sys                  import argv
 from sympy                import *
 
-# use this library to generate path that will work in both windows and linux
-# https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
-
-
-
-NUM_PATH = Path("./data/nums")
-CHAR_PATH = Path("./data/chars")
+# environment variables
+# NUM_PATH = Path("./data/nums")
+# CHAR_PATH = Path("./data/chars")
 DATA_PATH = [
     Path("./data/dataset/02"),
     Path("./data/dataset/03"),
@@ -44,61 +41,57 @@ disableP3 = False
 disableP4 = False
 debug = False
 
+# # create all permutations of allowed symbols for { problems of size 2, 3, or 4.
+# def foo(arr,n_items):
+#     if n_items == 2:
+#         for a in arr:
+#             for b in arr:
+#                 foo = random.sample(arr,n_items)
+#                 # print("\\[")
+#                 texStr = ""
+#                 texStr += "   \\left\\{"
+#                 texStr += "\\begin{array}{ll}"
+#                 texStr += "      "+str(a)+"\\\\"
+#                 texStr += "      "+str(b)+"\\\\"
+#                 texStr += "\\end{array} "
+#                 texStr += "\\right. "
+#                 #print(texStr)
 
+#     if n_items == 3:
+#         pass
+#     for a in arr:
+#         for b in arr:
+#             for c in arr:
+#                 foo = random.sample(arr,n_items)
+#                 # print("\\[")
+#                 texStr = ""
+#                 texStr += "   \\left\\{"
+#                 texStr += "\\begin{array}{ll}"
+#                 texStr += "      "+str(a)+"\\\\"
+#                 texStr += "      "+str(b)+"\\\\"
+#                 texStr += "      "+str(c)+"\\\\"
+#                 texStr += "\\end{array} "
+#                 texStr += "\\right. "
+#                 #print(texStr)
 
+#     for a in arr:
+#         for b in arr:
+#             for c in arr:
+#                 for d in arr:
+#                     foo = random.sample(arr,n_items)
+#                     # print("\\[")
+#                     texStr = ""
+#                     texStr += "   \\left\\{"
+#                     texStr += "\\begin{array}{ll}"
+#                     texStr += "      "+str(a)+"\\\\"
+#                     texStr += "      "+str(b)+"\\\\"
+#                     texStr += "      "+str(c)+"\\\\"
+#                     texStr += "      "+str(d)+"\\\\"
+#                     texStr += "\\end{array} "
+#                     texStr += "\\right. "
+#                     #print(texStr)
 
-
-# create all permutations of allowed symbols for { problems of size 2, 3, or 4.
-def foo(arr,n_items):
-    if n_items == 2:
-        for a in arr:
-            for b in arr:
-                foo = random.sample(arr,n_items)
-                # print("\\[")
-                texStr = ""
-                texStr += "   \\left\\{"
-                texStr += "\\begin{array}{ll}"
-                texStr += "      "+str(a)+"\\\\"
-                texStr += "      "+str(b)+"\\\\"
-                texStr += "\\end{array} "
-                texStr += "\\right. "
-                #print(texStr)
-
-    if n_items == 3:
-        pass
-    for a in arr:
-        for b in arr:
-            for c in arr:
-                foo = random.sample(arr,n_items)
-                # print("\\[")
-                texStr = ""
-                texStr += "   \\left\\{"
-                texStr += "\\begin{array}{ll}"
-                texStr += "      "+str(a)+"\\\\"
-                texStr += "      "+str(b)+"\\\\"
-                texStr += "      "+str(c)+"\\\\"
-                texStr += "\\end{array} "
-                texStr += "\\right. "
-                #print(texStr)
-
-    for a in arr:
-        for b in arr:
-            for c in arr:
-                for d in arr:
-                    foo = random.sample(arr,n_items)
-                    # print("\\[")
-                    texStr = ""
-                    texStr += "   \\left\\{"
-                    texStr += "\\begin{array}{ll}"
-                    texStr += "      "+str(a)+"\\\\"
-                    texStr += "      "+str(b)+"\\\\"
-                    texStr += "      "+str(c)+"\\\\"
-                    texStr += "      "+str(d)+"\\\\"
-                    texStr += "\\end{array} "
-                    texStr += "\\right. "
-                    #print(texStr)
-
-#resize images to 100x100 pixels with generated image in upper left corner
+# resize images to 100x100 pixels with generated image in upper left corner
 def resize_all(size=-1, data=-1):
     if data==-1 or size==-1:
         print("improper use of resize_all function. data parameter must be supplied.")
@@ -157,15 +150,35 @@ def bar(arr,n_items, sampleSize = 300):
 if __name__ == "__main__":
     # handle CLI parameters
     args = set(argv)
-    if "-chars" in args: enableChars = True
-    if "-nums"  in args: enableNums  = True
+    # if "-chars" in args: enableChars = True
+    # if "-nums"  in args: enableNums  = True
     if "-p2"    in args: disableP2    = True
     if "-p3"    in args: disableP3    = True
     if "-p4"    in args: disableP4    = True
 
+    print("WARNING: This program will overwrite everything inside the data directory.")
+    while True:
+        print("(y/n)")
+        f=input()
+        if str(f)=='y':
+            break
+        if str(f)=='n':
+            exit(0)
+
+
     print("How many instances to generate?")
     size=input()
     size = int(size)
+
+    if not os.path.exists('./data/dataset/dataset'):
+        os.makedirs('./data/dataset/dataset')
+    if not os.path.exists('./data/dataset/02'):
+        os.makedirs('./data/dataset/02')
+    if not os.path.exists('./data/dataset/03'):
+        os.makedirs('./data/dataset/03')
+    if not os.path.exists('./data/dataset/04'):
+        os.makedirs('./data/dataset/04')
+
 
     #setup characters, numbers, and operators
     chars= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
@@ -178,21 +191,21 @@ if __name__ == "__main__":
     total.extend(chars)
     total.extend(operators)
 
-    # numbers
-    if enableNums:
-        for num in nums:
-            path = NUM_PATH / f'num_{num}.png'
-            with open(path, 'wb') as outputfile:
-                preview(num, viewer='BytesIO', outputbuffer=outputfile)
-        print("finished generating num pictures")
+    # # numbers
+    # if enableNums:
+    #     for num in nums:
+    #         path = NUM_PATH / f'num_{num}.png'
+    #         with open(path, 'wb') as outputfile:
+    #             preview(num, viewer='BytesIO', outputbuffer=outputfile)
+    #     print("finished generating num pictures")
 
-    # characters
-    if enableChars:
-        for char in chars:
-            path = CHAR_PATH / f'char_{char}.png'
-            with open(path, 'wb') as outputfile:
-                preview(char, viewer='BytesIO', outputbuffer=outputfile)
-        print("finished generating characters")
+    # # characters
+    # if enableChars:
+    #     for char in chars:
+    #         path = CHAR_PATH / f'char_{char}.png'
+    #         with open(path, 'wb') as outputfile:
+    #             preview(char, viewer='BytesIO', outputbuffer=outputfile)
+    #     print("finished generating characters")
     
     #create piecewise data
     if not disableP2: bar(total,2,size)
@@ -234,8 +247,11 @@ if __name__ == "__main__":
             f.close()
         f = open("./data/dataset/dataset/keys.csv", 'w')
         for key in classes:
-            f.write(str(key)+',')
+            f.write(str(key)+'\n')
+        print("finished.")
 
+
+    
 
 
 
