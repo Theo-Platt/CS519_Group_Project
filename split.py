@@ -7,6 +7,10 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+# EMPTY THRESHOLD
+# the sum of either horizontal or vertical that is greater than this means that it is empty
+EMPTY_THRESHOLD = 10
+
 def get_horizontal_hist(img, col):
     # If the img has foreground pixel as black i.e pixel value = 0
     horizontal_hist = col - np.sum(img,axis=1,keepdims=True)/255
@@ -15,7 +19,7 @@ def get_horizontal_hist(img, col):
 
 
 def get_vertical_hist(img, row):
-     # If the img has foreground pixel as black i.e pixel value = 0
+    # If the img has foreground pixel as black i.e pixel value = 0
     vertical_hist = row - np.sum(img,axis=0,keepdims=True)/255
     # Logic :- No.of columns - No.of white pixels
 
@@ -27,9 +31,9 @@ def img_empty(img):
     # vertical hist
     horizontal_hist = get_horizontal_hist(img, col)
     
-    #
+    # sum all the values in the matrix
     result = np.sum(horizontal_hist)
-    if result > 10:
+    if result > EMPTY_THRESHOLD:
         return True
 
     return False
@@ -57,7 +61,7 @@ def segmentize(img):
     for i in range(len(horizontal_hist)):
         value = horizontal_hist[i][0]
 
-        if space_found and value > 0 and i > 0:
+        if space_found and value > EMPTY_THRESHOLD and i > 0:
             cv2.line(src, (0, i-1), (img_col, i-1), (255, 0, 0))
             rows.append(i-1)
             space_found = False
@@ -73,7 +77,7 @@ def segmentize(img):
     space_found = False
     for i in range(len(vertical_hist[0])):
         value = vertical_hist[0][i]
-        if space_found and value > 0 and i > 0:
+        if space_found and value > EMPTY_THRESHOLD and i > 0:
             cv2.line(src, (i-1, 0), (i-1, img_row), (255, 0, 0))
             cols.append(i-1)
             space_found = False
