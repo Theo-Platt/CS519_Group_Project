@@ -1,4 +1,4 @@
-# A program to try to split the data using histogram. 
+# A program to try to split the images using histogram. 
 # Code is based on https://docs.opencv.org/3.4/d8/dbc/tutorial_histogram_calculation.html
 # and https://towardsdatascience.com/segmentation-in-ocr-10de176cf373
 from __future__ import print_function
