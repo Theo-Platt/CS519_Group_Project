@@ -7,26 +7,7 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-class ImageWithPosition:
-    def __init__(self):
-        self.img = None
-        self.position = ()
-        self.sub_imgs = []
-
-    def __init__(self, img, position):
-        self.img = img
-        self.position = position
-        self.sub_imgs = []
-    
-    def set_sub_imgs(self, sub_imgs):
-        self.sub_imgs = sub_imgs
-    
-    def get_sub_imgs(self):
-        return self.sub_imgs
-
-    def get_img(self):
-        return self.img
+from misc import add_padding, black_or_white_transformer, get_shape, img_empty
 
 # segmentize image
 # not quite recursive right now because the recursion does not work. 
@@ -50,22 +31,6 @@ def get_vertical_hist(img, row):
     # Logic :- No.of columns - No.of white pixels
 
     return vertical_hist
-
-def img_empty(img):
-    for x in np.nditer(img):
-        if x != 255:
-            return False
-    
-    return True
-
-def add_padding(img):
-    row, col= get_shape(img)
-    temp1 = np.array([[np.uint8(255) for i in range(col + 2)] for j in range(row + 2)])
-    temp1[1:row+1, 1:col+1] = img
-    return temp1
-
-def get_shape(img):
-    return img.shape
 
 def segmentize(img):
      # the rgb of white is (255, 255, 255)
@@ -166,20 +131,6 @@ def segmentize_recur(img, old_img=np.array([[]])):
             sub_imges_map[i][j] = sub_img_map
     
     return (img, sub_imges_map)
-
-# pre-process the pixels
-def black_or_white_transformer(img):
-    for i in range(len(img)):
-        row = img[i]
-        for j in range(len(row)):
-            black_diff = np.abs(row[j] - 0)
-            white_diff = np.abs(row[j] - 255)
-            
-            row[j] = 0
-            if black_diff > white_diff:
-                row[j] = np.uint8(255)
-
-    return img
 
 def show_recursive(imgs_bundle):
     if imgs_bundle is None:

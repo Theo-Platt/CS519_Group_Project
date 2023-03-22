@@ -8,31 +8,12 @@ import numpy as np
 import os
 import imageio.v3 as iio
 import csv
+from CONFIG import *
 
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
 from pathlib import Path
-
-NUM_PATH = Path("./data/nums")
-CHAR_PATH = Path("./data/chars")
-OP_PATH = Path("./data/operators")
-COMMA_PATH = Path("./data/comma")
-
-# nums
-nums = ['0','1','2','3','4','5','6','7','8','9']
-# characters
-chars= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
-#operators
-operators= ['(', ')',\
-            '+', '-', '×', '÷', '=']
-comma = ","
-   
-
-PICTURE_WIDHT=100
-PICTURE_HEIGHT=100
-DENSITY_MIN = 70
-DENSITY_MAX = 600
 
 def save_latex(path, latex, dvi_density):
     with open(path, 'wb') as outputfile:
@@ -44,7 +25,7 @@ def save_latex(path, latex, dvi_density):
     # create new image of desired size and color (white) for padding
     ww = PICTURE_WIDHT
     hh = PICTURE_HEIGHT
-    color = (255,255,255)
+    color = WHITE
     result = np.full((hh,ww,cc), color, dtype=np.uint8)
 
     # set offsets for top left corner
@@ -75,7 +56,7 @@ if __name__ == "__main__":
 
     dataset = []
     # numbers
-    for num in nums:
+    for num in NUMS_CLASSES:
         folder_path = NUM_PATH / f'num_{num}_folder'
         if not os.path.exists(str(folder_path)):
              os.makedirs(folder_path)
@@ -88,9 +69,7 @@ if __name__ == "__main__":
     print("finished generating num pictures")
 
     # characters
-    temp = list(x.upper() for x in chars)
-    chars.extend(temp)
-    for char in chars:
+    for char in CHARS_CLASSES:
         folder_path = CHAR_PATH / f'char_{char}_folder'
         if not os.path.exists(str(folder_path)):
              os.makedirs(folder_path)
@@ -104,7 +83,7 @@ if __name__ == "__main__":
     print("finished generating characters")
 
     # operators
-    for op in operators:
+    for op in OPERATORS_CLASSES:
         folder_path = OP_PATH / f'op_{op}_folder'
         if not os.path.exists(str(folder_path)):
             os.makedirs(folder_path)
@@ -117,7 +96,7 @@ if __name__ == "__main__":
     print("finished generating operators")
     
     # comma
-    for i in range(1):
+    for comma in COMMAS_CLASSES:
         folder_path = COMMA_PATH
         if not os.path.exists(str(folder_path)):
             os.makedirs(folder_path)
@@ -133,7 +112,7 @@ if __name__ == "__main__":
     
     # save
     print(f"Saving to {save_file_name}...")
-    with open(f'./data/{save_file_name}', 'w') as f:
+    with open(str(DATA_FOLDER / save_file_name), 'w') as f:
             # using csv.writer method from CSV package
             write = csv.writer(f)
             write.writerows(dataset)

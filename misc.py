@@ -1,38 +1,69 @@
-from sklearn.base import BaseEstimator, TransformerMixin
+import csv
+import cv2
 import numpy as np
-from skimage.feature import hog
 
-#
-## https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
+# use this library to generate path that will work in both windows and linux
+# https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
+from pathlib import Path
 
-class HogTransformer(BaseEstimator, TransformerMixin):
-    """
-    Expects an array of 2d arrays (1 channel images)
-    Calculates hog features for each img
-    """
- 
-    def __init__(self, y=None, orientations=9,
-                 pixels_per_cell=(8, 8),
-                 cells_per_block=(3, 3), block_norm='L2-Hys'):
-        self.y = y
-        self.orientations = orientations
-        self.pixels_per_cell = pixels_per_cell
-        self.cells_per_block = cells_per_block
-        self.block_norm = block_norm
- 
-    def fit(self, X, y=None):
-        return self
- 
-    def transform(self, X, y=None):
- 
-        def local_hog(X):
-            return hog(X,
-                       orientations=self.orientations,
-                       pixels_per_cell=self.pixels_per_cell,
-                       cells_per_block=self.cells_per_block,
-                       block_norm=self.block_norm)
- 
-        try: # parallel
-            return np.array([local_hog(img) for img in X])
-        except:
-            return np.array([local_hog(img) for img in X])
+def parse_data(path, labels):
+    dataset = {}
+    with open(path) as csvfile:
+        reader = csv.reader(csvfile, delimiter=',', quotechar='\"')
+        for row in reader:
+            label = row[1]
+            path = row[0]
+            if label in labels:
+                if label not in dataset:
+                    dataset[label] = []
+                
+                # get the list of data associated with this label
+                data_list = dataset[label]
+                # get the data path
+                path = Path(path)
+                
+                # read the image
+                my_data = cv2.imread(str(path))
+                # convert it to gray
+                my_data = cv2.cvtColor(my_data, cv2.COLOR_BGR2GRAY)
+                # add it to the list
+                data_list.append(my_data)
+    
+    X = []
+    y = []
+    for label in dataset:
+        for my_data in dataset[label]:
+            X.append(my_data)
+            y.append(label)
+    
+    return (dataset, np.array(X), np.array(y))
+
+# pre-process the pixels
+def black_or_white_transformer(img):
+    for i in range(len(img)):
+        row = img[i]
+        for j in range(len(row)):
+            black_diff = np.abs(row[j] - 0)
+            white_diff = np.abs(row[j] - 255)
+            
+            row[j] = 0
+            if black_diff > white_diff:
+                row[j] = np.uint8(255)
+
+    return img
+
+def img_empty(img):
+    for x in np.nditer(img):
+        if x != 255:
+            return False
+    
+    return True
+
+def get_shape(img):
+    return img.shape
+
+def add_padding(img):
+    row, col= get_shape(img)
+    temp1 = np.array([[np.uint8(255) for i in range(col + 2)] for j in range(row + 2)])
+    temp1[1:row+1, 1:col+1] = img
+    return temp1
