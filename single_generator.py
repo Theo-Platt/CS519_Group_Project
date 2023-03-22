@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
         for i in range(instances_num):    
             path = folder_path / f'comma({i}).png'
-            save_latex(path, comma, randint(DENSITY_MIN, DENSITY_MAX))
+            save_latex(path, ",", randint(DENSITY_MIN, DENSITY_MAX))
 
             dataset.append([f"{str(path)}", f"comma"])
     print("finished generating comma")
