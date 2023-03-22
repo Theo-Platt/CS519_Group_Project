@@ -7,6 +7,27 @@ import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+class ImageWithPosition:
+    def __init__(self):
+        self.img = None
+        self.position = ()
+        self.sub_imgs = []
+
+    def __init__(self, img, position):
+        self.img = img
+        self.position = position
+        self.sub_imgs = []
+    
+    def set_sub_imgs(self, sub_imgs):
+        self.sub_imgs = sub_imgs
+    
+    def get_sub_imgs(self):
+        return self.sub_imgs
+
+    def get_img(self):
+        return self.img
+
 # segmentize image
 # not quite recursive right now because the recursion does not work. 
 def segmentize_recursive(img):
@@ -93,7 +114,10 @@ def segmentize(img):
             space_found = True
 
     # crop the images. 
-    sub_imgs = []
+    # check for empty
+    # padding
+    # add add the result
+    final_result = np.array([[None for i in range(len(cols))] for j in range(len(rows))])
     for i in range(len(rows)-1):
         for j in range(len(cols)-1):
             row_s = rows[i]
@@ -101,23 +125,22 @@ def segmentize(img):
             col_s = cols[j]
             col_e = cols[j+1]
             
-            temp =  gray_img[row_s:row_e, col_s:col_e]
-            temp = add_padding(temp)
-            sub_imgs.append(
-               temp
-            )
+            # crop
+            img =  gray_img[row_s:row_e, col_s:col_e]
 
-    # check for empty images. 
-    result = []
-    for img in sub_imgs:
-        shape = get_shape(img)
-        if shape[0] == 0 or shape[1] == 0:
-            continue
-        if img_empty(img):
-            continue
-            
-        result.append(img)
-    
+            # empty
+            shape = get_shape(img)
+            if shape[0] == 0 or shape[1] == 0:
+                continue
+            if img_empty(img):
+                continue
+
+            # add padding
+            img = add_padding(img)
+
+            # add to final result
+            final_result[i][j] = img
+
     # Plot histogram
     # plt.plot(horizontal_hist, range(img_row))
     # plt.xlim(img_col)
@@ -125,21 +148,24 @@ def segmentize(img):
     # plt.ylabel('Frequency')
     # plt.show()
 
-    return result
+    return final_result
 
 # segmentize recursive
 def segmentize_recur(img, old_img=np.array([[]])):
     if get_shape(img) == get_shape(old_img):
-        return [img]
+        return (img, np.array([[]]))
     
-    sub_imges = segmentize(img)
-    result = []
-    for sub_img in sub_imges:
-        result.extend(segmentize_recur(sub_img, img))
-        
-        
+    sub_imges_map = segmentize(img)
+    row, col= sub_imges_map.shape
+    for i in range(row):
+        for j in range(col):
+            sub_img = sub_imges_map[i][j]
+            if sub_img is None:
+                continue
+            sub_img_map = segmentize_recur(sub_img, img)
+            sub_imges_map[i][j] = sub_img_map
     
-    return result
+    return (img, sub_imges_map)
 
 # pre-process the pixels
 def black_or_white_transformer(img):
@@ -154,28 +180,44 @@ def black_or_white_transformer(img):
                 row[j] = np.uint8(255)
 
     return img
-if __name__ == "__main__":
-    src = cv2.imread("test.png")
-    img = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-    cv2.imshow('Source image', black_or_white_transformer(img))
+
+def show_recursive(imgs_bundle):
+    if imgs_bundle is None:
+        return
+    src_img = imgs_bundle[0]
+    imgs_map = imgs_bundle[1]
+    cv2.imshow(f'src_image', src_img)
+
+    for i in range(len(imgs_map)):
+        imgs_row = imgs_map[i]
+        for j in range(len(imgs_row)):
+            sub_img_bundle = imgs_row[j]
+            if sub_img_bundle is None:
+                continue
+
+            sub_img = sub_img_bundle[0]
+            cv2.imshow(f'cropped ({i}, {j})', sub_img)
+
     cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    cv2.destroyAllWindows() 
+    
+    for i in range(len(imgs_map)):
+        imgs_row = imgs_map[i]
+        for j in range(len(imgs_row)):
+            sub_img_bundle = imgs_row[j]
+            show_recursive(sub_img_bundle)
+            
+
+if __name__ == "__main__":
+    src = cv2.imread("test1.png")
+    img = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
   
     if src is None:
         print('Could not open or find the image.')
         exit(0)
     
     imgs = segmentize_recursive(src)
-    print("sub images:", len(imgs))
-    
-    i = 0
-    for img in imgs:
-        cv2.imshow(f'cropped{i}', img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows() 
-        if img_empty(img):
-            print("empty")
-        
-    
-        i = i + 1
+    show_recursive(imgs)
+
+
   
