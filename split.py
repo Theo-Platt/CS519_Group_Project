@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 # not quite recursive right now because the recursion does not work. 
 def segmentize_recursive(img):
     img = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
-    imgs = segmentize(add_padding(black_or_white_transformer(img)))
+    imgs = segmentize_recur(add_padding(black_or_white_transformer(img)))
     return imgs
 
 # 0 if space
@@ -31,16 +31,11 @@ def get_vertical_hist(img, row):
     return vertical_hist
 
 def img_empty(img):
-    row, col = get_shape(img)
-
-    # vertical hist
-    horizontal_hist = get_horizontal_hist(img, col)
+    for x in np.nditer(img):
+        if x != 255:
+            return False
     
-    result = np.sum(horizontal_hist)
-    if np.uint8(result) == 0:
-        return True
-    
-    return False
+    return True
 
 def add_padding(img):
     row, col= get_shape(img)
@@ -135,7 +130,7 @@ def segmentize(img):
 # segmentize recursive
 def segmentize_recur(img, old_img=np.array([[]])):
     if get_shape(img) == get_shape(old_img):
-        return img
+        return [img]
     
     sub_imges = segmentize(img)
     result = []
@@ -173,12 +168,14 @@ if __name__ == "__main__":
     imgs = segmentize_recursive(src)
     print("sub images:", len(imgs))
     
-  
-    
     i = 0
     for img in imgs:
-      
         cv2.imshow(f'cropped{i}', img)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows() 
+        if img_empty(img):
+            print("empty")
+        
+    
         i = i + 1
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()   
+  
