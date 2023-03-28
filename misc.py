@@ -26,6 +26,8 @@ def parse_data(path, labels):
                 my_data = cv2.imread(str(path))
                 # convert it to gray
                 my_data = cv2.cvtColor(my_data, cv2.COLOR_BGR2GRAY)
+                # black or white
+                my_data = black_or_white_transformer(my_data)
                 # add it to the list
                 data_list.append(my_data)
     

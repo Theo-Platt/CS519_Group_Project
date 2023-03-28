@@ -12,7 +12,7 @@ from misc import add_padding, black_or_white_transformer, get_shape, img_empty
 # segmentize image
 # not quite recursive right now because the recursion does not work. 
 def segmentize_recursive(img):
-    img = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     imgs = segmentize_recur(add_padding(black_or_white_transformer(img)))
     return imgs
 
@@ -161,7 +161,7 @@ def show_recursive(imgs_bundle):
 
 if __name__ == "__main__":
     src = cv2.imread("test1.png")
-    img = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)
+
   
     if src is None:
         print('Could not open or find the image.')

@@ -1,6 +1,7 @@
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 from skimage.feature import hog
+import skimage
 
 #
 ## https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
@@ -24,8 +25,10 @@ class HogTransformer(BaseEstimator, TransformerMixin):
         return self
  
     def transform(self, X, y=None):
- 
+        #print("transform", X.shape)
+
         def local_hog(X):
+            #print(X.shape)
             return hog(X,
                        orientations=self.orientations,
                        pixels_per_cell=self.pixels_per_cell,
@@ -36,3 +39,20 @@ class HogTransformer(BaseEstimator, TransformerMixin):
             return np.array([local_hog(img) for img in X])
         except:
             return np.array([local_hog(img) for img in X])
+
+
+class RGB2GrayTransformer(BaseEstimator, TransformerMixin):
+    """
+    Convert an array of RGB images to grayscale
+    """
+ 
+    def __init__(self):
+        pass
+ 
+    def fit(self, X, y=None):
+        """returns itself"""
+        return self
+ 
+    def transform(self, X, y=None):
+        """perform the transformation and return an array"""
+        return np.array([skimage.color.rgb2gray(img) for img in X])
