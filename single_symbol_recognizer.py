@@ -10,6 +10,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
 from CONFIG import *
 from sklearn.decomposition import PCA
+from misc import move_center
 
 import cv2
 from split import segmentize_recursive, show_recursive
@@ -58,16 +59,8 @@ def guess_recursive(imgs_bundle, pipes):
         # y_ratio = 50 / src_img.shape[1]
         # src_img = cv2.resize(src_img)
     
-        result = np.full((100, 100), fill_value=255, dtype=np.uint8)
-        # set offsets for top left corner
-        xx = 0
-        yy = 0
-        x = src_img.shape[0]
-        y = src_img.shape[1]
-        # print(result.shape)
-        # print(src_img.shape)
-        result[yy:yy+x, xx:xx+y] = src_img
-        src_img = result
+       
+        src_img = move_center(src_img)
 
         print("start")
        
