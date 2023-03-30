@@ -41,6 +41,26 @@ class HogTransformer(BaseEstimator, TransformerMixin):
             return np.array([local_hog(img) for img in X])
 
 
+
+class SpreadTransformer(BaseEstimator, TransformerMixin):
+    """
+    Convert an array of grayscale images to a matrix of pixels
+    """
+ 
+    def __init__(self):
+        pass
+ 
+    def fit(self, X, y=None):
+        """returns itself"""
+        return self
+ 
+    def transform(self, X, y=None):
+        """perform the transformation and return an array"""
+        result = np.array([])
+        # for img in X:
+        #     result.extend()
+        return result
+
 class RGB2GrayTransformer(BaseEstimator, TransformerMixin):
     """
     Convert an array of RGB images to grayscale

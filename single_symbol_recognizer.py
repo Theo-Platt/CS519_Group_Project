@@ -1,14 +1,15 @@
 # Code to train models to recognizer symbols and everything. 
 
 import numpy as np
-from sklearn.linear_model import LogisticRegression
+from sklearn.linear_model import LogisticRegression, Perceptron
 from sklearn.preprocessing import StandardScaler, Normalizer
 from skimage.transform import rescale
-from transformer import HogTransformer
+from transformer import HogTransformer, SpreadTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
 from CONFIG import *
+from sklearn.decomposition import PCA
 
 import cv2
 from split import segmentize_recursive, show_recursive
@@ -28,13 +29,15 @@ predicted_ops = []
 def create_pipeline(model):
     pipe = Pipeline(
     [
-        ("hogify", HogTransformer(
-            pixels_per_cell=(14, 14), 
-            cells_per_block=(2,2), 
-            orientations=9, 
-            block_norm='L2-Hys')
-        ), 
+        # ("hogify", HogTransformer(
+        #     pixels_per_cell=(14, 14), 
+        #     cells_per_block=(2,2), 
+        #     orientations=9, 
+        #     block_norm='L2-Hys')
+        # ), 
+        ("spreader", SpreadTransformer()),
         ('scaler', StandardScaler()),
+        ("dim_reduct", PCA(n_components=0.9)),
         ('model', model)
     ])
 
@@ -70,10 +73,10 @@ def guess_recursive(imgs_bundle, pipes):
        
         
         num  = pipes['0'].predict(np.array([src_img]))
-        op = pipes['('].predict(np.array([src_img]))
+        #op = pipes['('].predict(np.array([src_img]))
 
         predicted_numbers.extend(num)
-        predicted_ops.extend(op)
+        #predicted_ops.extend(op)
 
         cv2.imshow(f'src_image', src_img)
         print("found leaf")
@@ -89,7 +92,7 @@ def guess_recursive(imgs_bundle, pipes):
 #https://kapernikov.com/tutorial-image-classification-with-scikit-learn/
 if __name__ == "__main__":
     pipelines = {}
-    classes = [NUMS_CLASSES, OPERATORS_CLASSES]
+    classes = [NUMS_CLASSES]
     for CLASSES in classes:
         dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES)
 
@@ -100,7 +103,8 @@ if __name__ == "__main__":
 
         # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
         # create the model
-        model = LogisticRegression(C=100, solver='lbfgs', max_iter=100, multi_class="ovr")
+        #model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
+        model = Perceptron()
 
         # train
         pipe = create_pipeline(model)
