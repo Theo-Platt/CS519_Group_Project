@@ -56,45 +56,45 @@ if __name__ == "__main__":
             dataset.append([f"{str(path)}", f"{str(num)}"])
     print("finished generating num pictures")
 
-    # characters
-    for char in CHARS_CLASSES:
-        folder_path = CHAR_PATH / f'char_{char}_folder'
-        if not os.path.exists(str(folder_path)):
-             os.makedirs(folder_path)
+    # # characters
+    # for char in CHARS_CLASSES:
+    #     folder_path = CHAR_PATH / f'char_{char}_folder'
+    #     if not os.path.exists(str(folder_path)):
+    #          os.makedirs(folder_path)
 
-        for i in range(instances_num):    
-            path = folder_path / f'char_{char}({i}).png'
-            save_latex(path, char, randint(DENSITY_MIN, DENSITY_MAX))
+    #     for i in range(instances_num):    
+    #         path = folder_path / f'char_{char}({i}).png'
+    #         save_latex(path, char, randint(DENSITY_MIN, DENSITY_MAX))
 
-            dataset.append([f"{str(path)}", f"{str(char)}"])
+    #         dataset.append([f"{str(path)}", f"{str(char)}"])
 
-    print("finished generating characters")
+    # print("finished generating characters")
 
-    # operators
-    for op in OPERATORS_CLASSES:
-        folder_path = OP_PATH / f'op_{op}_folder'
-        if not os.path.exists(str(folder_path)):
-            os.makedirs(folder_path)
+    # # operators
+    # for op in OPERATORS_CLASSES:
+    #     folder_path = OP_PATH / f'op_{op}_folder'
+    #     if not os.path.exists(str(folder_path)):
+    #         os.makedirs(folder_path)
 
-        for i in range(instances_num):    
-            path = folder_path / f'op_{op}({i}).png'
-            save_latex(path, op, randint(DENSITY_MIN, DENSITY_MAX))
+    #     for i in range(instances_num):    
+    #         path = folder_path / f'op_{op}({i}).png'
+    #         save_latex(path, op, randint(DENSITY_MIN, DENSITY_MAX))
 
-            dataset.append([f"{str(path)}", f"{str(op)}"])
-    print("finished generating operators")
+    #         dataset.append([f"{str(path)}", f"{str(op)}"])
+    # print("finished generating operators")
     
-    # comma
-    for comma in COMMAS_CLASSES:
-        folder_path = COMMA_PATH
-        if not os.path.exists(str(folder_path)):
-            os.makedirs(folder_path)
+    # # comma
+    # for comma in COMMAS_CLASSES:
+    #     folder_path = COMMA_PATH
+    #     if not os.path.exists(str(folder_path)):
+    #         os.makedirs(folder_path)
 
-        for i in range(instances_num):    
-            path = folder_path / f'comma({i}).png'
-            save_latex(path, ",", randint(DENSITY_MIN, DENSITY_MAX))
+    #     for i in range(instances_num):    
+    #         path = folder_path / f'comma({i}).png'
+    #         save_latex(path, ",", randint(DENSITY_MIN, DENSITY_MAX))
 
-            dataset.append([f"{str(path)}", f"comma"])
-    print("finished generating comma")
+    #         dataset.append([f"{str(path)}", f"comma"])
+    # print("finished generating comma")
     
     save_file_name = "symbol_dataset.csv"
     
