@@ -1,6 +1,7 @@
 import csv
 import cv2
 import numpy as np
+from CONFIG import *
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
@@ -39,6 +40,27 @@ def parse_data(path, labels):
             y.append(label)
     
     return (dataset, np.array(X), np.array(y))
+
+
+def move_center(img):
+    ht, wd, cc= img.shape
+
+    # create new image of desired size and color (white) for padding
+    ww = PICTURE_WIDHT
+    hh = PICTURE_HEIGHT
+    color = WHITE
+    result = np.full((hh,ww,cc), color, dtype=np.uint8)
+
+    # set offsets for top left corner
+    xx = 0
+    yy = 0
+    # compute center offset
+    xx = (ww - wd) // 2
+    yy = (hh - ht) // 2
+
+    # copy img image into center of result image
+    result[yy:yy+ht, xx:xx+wd] = img
+    return result
 
 # pre-process the pixels
 def black_or_white_transformer(img):

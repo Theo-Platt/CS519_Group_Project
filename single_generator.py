@@ -9,7 +9,7 @@ import os
 import imageio.v3 as iio
 import csv
 from CONFIG import *
-
+from misc import move_center
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
@@ -20,21 +20,9 @@ def save_latex(path, latex, dvi_density):
             preview(latex, viewer='BytesIO', outputbuffer=outputfile, dvioptions=['-D',str(dvi_density)])
         
     img = cv2.imread(str(path))
-    ht, wd, cc= img.shape
+    
 
-    # create new image of desired size and color (white) for padding
-    ww = PICTURE_WIDHT
-    hh = PICTURE_HEIGHT
-    color = WHITE
-    result = np.full((hh,ww,cc), color, dtype=np.uint8)
-
-    # set offsets for top left corner
-    xx = 0
-    yy = 0
-
-    # copy img image into center of result image
-    result[yy:yy+ht, xx:xx+wd] = img
-
+    result = move_center(img)
     # view result
     # cv2.imshow("result", result)
     # cv2.waitKey(0)
