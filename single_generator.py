@@ -17,7 +17,7 @@ from pathlib import Path
 
 def save_latex(path, latex, dvi_density):
     with open(path, 'wb') as outputfile:
-            preview(latex, viewer='BytesIO', outputbuffer=outputfile, euler=False, dvioptions=['-D',str(dvi_density)])
+            preview(latex, viewer='BytesIO', outputbuffer=outputfile, preamble="\\usepackage{mathptmx}", dvioptions=['-D',str(dvi_density)])
         
     img = cv2.imread(str(path))
     
