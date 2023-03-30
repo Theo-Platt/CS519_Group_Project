@@ -11,6 +11,7 @@ from sklearn.metrics import accuracy_score
 from CONFIG import *
 from sklearn.decomposition import PCA
 from misc import move_center
+from sklearn.tree import DecisionTreeClassifier
 
 import cv2
 from split import segmentize_recursive, show_recursive
@@ -30,13 +31,13 @@ predicted_ops = []
 def create_pipeline(model):
     pipe = Pipeline(
     [
-        # ("hogify", HogTransformer(
-        #     pixels_per_cell=(14, 14), 
-        #     cells_per_block=(2,2), 
-        #     orientations=9, 
-        #     block_norm='L2-Hys')
-        # ), 
-        ("spreader", SpreadTransformer()),
+        ("hogify", HogTransformer(
+            pixels_per_cell=(14, 14), 
+            cells_per_block=(2,2), 
+            orientations=9, 
+            block_norm='L2-Hys')
+        ), 
+        # ("spreader", SpreadTransformer()),
         ('scaler', StandardScaler()),
         ("dim_reduct", PCA(n_components=0.9)),
         ('model', model)
@@ -62,7 +63,7 @@ def guess_recursive(imgs_bundle, pipes):
        
         src_img = move_center(src_img)
 
-        print("start")
+        # print("start")
        
         
         num  = pipes['0'].predict(np.array([src_img]))
@@ -72,7 +73,9 @@ def guess_recursive(imgs_bundle, pipes):
         #predicted_ops.extend(op)
 
         cv2.imshow(f'src_image', src_img)
-        print("found leaf")
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows() 
+        # print("found leaf")
       
     
     for i in range(len(imgs_map)):
@@ -96,8 +99,9 @@ if __name__ == "__main__":
 
         # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
         # create the model
-        #model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
-        model = Perceptron()
+        # model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
+        # model = Perceptron()
+        model= DecisionTreeClassifier()
 
         # train
         pipe = create_pipeline(model)
@@ -120,16 +124,15 @@ if __name__ == "__main__":
     imgs = segmentize_recursive(src)
     guess_recursive(imgs, pipelines)
 
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows() 
+    
     
     expected_values = expected_values.split(" ")
     print("Expected: ",expected_values)
     print("numbers:  ",predicted_numbers)
     # print("ops:      ",predicted_ops)
-    print(predicted_numbers)
-    print(len(expected_values))
-    print(len(predicted_numbers))
+    # print(predicted_numbers)
+    # print(len(expected_values))
+    # print(len(predicted_numbers))
     # print(len(predicted_ops))
     print('Percentage correct: ', accuracy_score(expected_values, predicted_numbers))
     # print('Percentage correct: ', accuracy_score(expected_values, predicted_ops))
