@@ -9,7 +9,7 @@ import os
 import imageio.v3 as iio
 import csv
 from CONFIG import *
-from misc import move_center
+from misc import move_center_gen
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
@@ -17,12 +17,12 @@ from pathlib import Path
 
 def save_latex(path, latex, dvi_density):
     with open(path, 'wb') as outputfile:
-            preview(latex, viewer='BytesIO', outputbuffer=outputfile, dvioptions=['-D',str(dvi_density)])
+            preview(latex, viewer='BytesIO', outputbuffer=outputfile, euler=False, dvioptions=['-D',str(dvi_density)])
         
     img = cv2.imread(str(path))
     
 
-    result = move_center(img)
+    result = move_center_gen(img)
     # view result
     # cv2.imshow("result", result)
     # cv2.waitKey(0)
