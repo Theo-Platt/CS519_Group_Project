@@ -17,8 +17,7 @@ from pathlib import Path
 
 def save_latex(path, latex, font, dvi_density):
     with open(path, 'wb') as outputfile:
-            font_fam, font_code = font
-            preamble = "\\documentclass[22pt]{minimal}\n" + f"\\usepackage{{{font_fam}}}\\fontfamily{{{font_code}}}\\selectfont" + "\\begin{document}"
+            preamble = "\\documentclass[22pt]{minimal}\n" + f"\\usepackage[T1]{{fontenc}} \\usepackage{{{font}}}" + "\\begin{document}"
             preview(latex, viewer='BytesIO', outputbuffer=outputfile, preamble=preamble,dvioptions=['-D',str(dvi_density)])
         
     img = cv2.imread(str(path))
@@ -52,7 +51,7 @@ def main():
 
         for i in range(instances_num):    
             path = folder_path / f'num_{num}({i}).png'
-            save_latex(path, num, font=("mathptmx", "ptm"), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
+            save_latex(path, num, font="courier", dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
 
             dataset.append([f"{str(path)}", f"{str(num)}"])
     print("finished generating num pictures")

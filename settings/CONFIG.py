@@ -25,8 +25,11 @@ COMMAS_CLASSES = ['comma', "not comma"]
 # picture settings
 PICTURE_WIDHT=100
 PICTURE_HEIGHT=100
-DENSITY_MIN = 70
+DENSITY_MIN = 100
 DENSITY_MAX = 600
+
+# FONTs
+fonts = ["mathptmx"]
 
 # COLOR
 WHITE = (255, 255, 255)
