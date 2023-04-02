@@ -1,6 +1,6 @@
 # Code to generate images of each individual characters, number digits, and operators
 
-from random import randint
+from random import randint, Random
 from sympy import *
 from shutil import which
 import cv2
@@ -16,8 +16,9 @@ from misc import normalize_img
 from pathlib import Path
 
 def save_latex(path, latex, font, dvi_density):
+    font_package, font_fam = font
     with open(path, 'wb') as outputfile:
-            preamble = "\\documentclass[22pt]{minimal}\n" + f"\\usepackage[T1]{{fontenc}} \\usepackage{{{font}}}" + "\\begin{document}"
+            preamble = "\\documentclass[22pt]{minimal}\n"  + f"\\usepackage[T1]{{fontenc}} \\usepackage{{{font_package}}} \\renewcommand{{\\sfdefault}}{{{font_fam}}}\\renewcommand{{\\familydefault}}{{\sfdefault}}" + "\\begin{document}"
             preview(latex, viewer='BytesIO', outputbuffer=outputfile, preamble=preamble,dvioptions=['-D',str(dvi_density)])
         
     img = cv2.imread(str(path))
@@ -48,10 +49,12 @@ def main():
         folder_path = NUM_PATH / f'num_{num}_folder'
         if not os.path.exists(str(folder_path)):
              os.makedirs(folder_path)
+            
 
+        rand = Random()
         for i in range(instances_num):    
             path = folder_path / f'num_{num}({i}).png'
-            save_latex(path, num, font="courier", dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
+            save_latex(path, num, font=rand.choice(FONTS), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
 
             dataset.append([f"{str(path)}", f"{str(num)}"])
     print("finished generating num pictures")

@@ -29,7 +29,9 @@ DENSITY_MIN = 100
 DENSITY_MAX = 600
 
 # FONTs
-fonts = ["mathptmx"]
+# Link: https://tex.stackexchange.com/questions/33677/setting-font-family-for-the-whole-document
+# https://www.overleaf.com/learn/latex/Font_typefaces#Changing_the_default_document_fonts
+FONTS = [("mathptmx", "cmr"), ("lmodern","lmr"), ("helvet","phv"), ("tgtermes","qtm"), ("tgpagella","qpl"), ("mathptmx", "ptm"), ("tgschola", "qcs")]
 
 # COLOR
 WHITE = (255, 255, 255)
