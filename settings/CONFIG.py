@@ -30,3 +30,10 @@ DENSITY_MAX = 600
 
 # COLOR
 WHITE = (255, 255, 255)
+
+# saved model path
+PIPELINE_PATH=Path("./model_parameters/pipe.sav")
+NUM_MODEL_PATH=Path("./model_parameters/num.sav")
+CHAR_MODEL_PATH=Path("./model_parameters/char.sav")
+OP_MODEL_PATH=Path("./model_parameters/op.sav")
+
