@@ -1,6 +1,7 @@
 # Code to train models to recognizer symbols and everything. 
 
 import numpy as np
+from pathlib import Path
 from sklearn.linear_model import LogisticRegression, Perceptron
 from sklearn.preprocessing import StandardScaler, Normalizer
 from skimage.transform import rescale
@@ -12,6 +13,9 @@ from settings.CONFIG import *
 from sklearn.decomposition import PCA
 from misc import move_center
 from sklearn.tree import DecisionTreeClassifier
+from settings import CONFIG
+from os.path import join
+import pickle
 
 import cv2
 from func_codes.split import segmentize_recursive, show_recursive
@@ -36,17 +40,23 @@ def create_pipeline(model):
         ('scaler', StandardScaler()),
         ("dim_reduct", PCA(n_components=0.9)),
         ('model', model)
-    ])
+    ]
+    )
 
     return pipe
+
             
 #https://kapernikov.com/tutorial-image-classification-with-scikit-learn/
 def main():
-    classes = [NUMS_CLASSES]
+    classes = [(NUMS_CLASSES,'NUMBERS')]
+    # classes = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (COMMAS_CLASSES,'COMMAS') , (OPERATORS_CLASSES,'OPERATORS')]
     for CLASSES in classes:
-        dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES)
-
-        print(np.unique(y))
+        dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES[0])
+        # print(np.array(CLASSES[0]).shape)
+        # print(CLASSES[0])
+        print(f"Training dataset: {CLASSES[1]}")
+        # print(y)
+        # print(np.unique(y))
 
         # train test split
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
@@ -62,5 +72,39 @@ def main():
         pipe.fit(X_train, y_train)
 
         # test the data
-        y_pred = pipe.predict(X_test)
-        print('Percentage correct: ', accuracy_score(y_test, y_pred))
+        y_pred_train = pipe.predict(X_train)
+        y_pred_test  = pipe.predict(X_test)
+        print("This model has the following accuracy scores:")
+        print('  Training percentage: ', 100 *accuracy_score(y_train, y_pred_train),'%')
+        print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
+
+
+        # allow data model overwrite?
+        try:
+            # load old data
+            old_model = pickle.load( open(join(MODEL_FOLDER,Path(f'{CLASSES[1]}_MODEL.bin')), 'rb') )
+            old_model.predict(X_test) #ensure old model exists
+            # print('  Training percentage: ', 100 *accuracy_score(y_train, old_model.predict(X_train)),'%')
+            # print('  Testing percentage:  ', 100 *accuracy_score(y_test, old_model.predict(X_test)),'%')
+            save = input(f"Do you want to overwrite existing model of '{CLASSES[1]}_MODEL'? (y/n)\n")
+            while(True):
+                if save == 'y':
+                    file = open(join(MODEL_FOLDER,Path(f'{CLASSES[1]}_MODEL.bin')), 'wb+')
+                    pickle.dump(pipe,file)
+                    break
+                if save == 'n':
+                    break
+                save = input("please type one of the following. (y/n)\n")
+        except:
+            save = input(f"No existing model found. Would you like to save a new model for '{CLASSES[1]}_MODEL'? (y/n)\n")
+            while(True):
+                if save == 'y':
+                    file = open(join(MODEL_FOLDER,Path(f'{CLASSES[1]}_MODEL.bin')), 'wb+')
+                    pickle.dump(pipe,file)
+                    break
+                if save == 'n':
+                    break
+                save = input("please type one of the following. (y/n)\n")
+
+
+

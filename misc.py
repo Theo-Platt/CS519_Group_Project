@@ -2,6 +2,10 @@ import csv
 import cv2
 import numpy as np
 from settings.CONFIG import *
+from settings import CONFIG
+import pickle
+from os.path import join
+from pathlib import Path
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
@@ -12,6 +16,8 @@ def parse_data(path, labels):
     with open(path) as csvfile:
         reader = csv.reader(csvfile, delimiter=',', quotechar='\"')
         for row in reader:
+            if row == []: continue
+            # print(row)
             label = row[1]
             path = row[0]
             if label in labels:
@@ -132,3 +138,23 @@ def add_padding(img):
     temp1 = np.array([[np.uint8(255) for i in range(col + 2)] for j in range(row + 2)])
     temp1[1:row+1, 1:col+1] = img
     return temp1
+
+def load_models(exitOnFail = False, verbose=True):
+    # load models into dictionary
+    models = {}
+    keys = [
+        'NUMBERS' , 
+        'CHARACTERS' , 
+        'COMMAS' , 
+        'OPERATORS'
+        ]
+    for cl in keys:
+        try:
+            f = open( join(CONFIG.MODEL_FOLDER,Path(f'{cl}_MODEL.bin')), 'rb')
+            models[cl] = pickle.load(f)
+            f.close()
+            if verbose: print(f"successfully loaded model '{cl}_MODEL.bin'")
+        except:
+            if verbose: print(f"failed to load model '{cl}_MODEL.bin'")
+            if exitOnFail: exit(1)
+    return models
