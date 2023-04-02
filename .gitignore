@@ -131,8 +131,5 @@ dmypy.json
 # users
 myenv
 
-# uncomment this after we make sure that the data is correct. 
-data
-
 # folder that stores model parameters
 model_parameters*
