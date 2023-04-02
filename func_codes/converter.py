@@ -1,5 +1,5 @@
 # import segmentation library
-from split import segmentize_recursive
+from func_codes.split import segmentize_recursive
 # misc
 from misc import move_center
 import cv2

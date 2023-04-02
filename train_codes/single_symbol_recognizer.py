@@ -4,17 +4,17 @@ import numpy as np
 from sklearn.linear_model import LogisticRegression, Perceptron
 from sklearn.preprocessing import StandardScaler, Normalizer
 from skimage.transform import rescale
-from transformer import HogTransformer, SpreadTransformer
+from train_codes.transformer import HogTransformer, SpreadTransformer
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import accuracy_score
-from CONFIG import *
+from settings.CONFIG import *
 from sklearn.decomposition import PCA
 from misc import move_center
 from sklearn.tree import DecisionTreeClassifier
 
 import cv2
-from split import segmentize_recursive, show_recursive
+from func_codes.split import segmentize_recursive, show_recursive
 
 
 # use this library to generate path that will work in both windows and linux

@@ -1,7 +1,7 @@
 import csv
 import cv2
 import numpy as np
-from CONFIG import *
+from settings.CONFIG import *
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f

@@ -1,5 +1,5 @@
 import argparse
-from converter import Converter
+from func_codes.converter import Converter
 import cv2
 
 if __name__ == "__main__":

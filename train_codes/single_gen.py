@@ -8,7 +8,7 @@ import numpy as np
 import os
 import imageio.v3 as iio
 import csv
-from CONFIG import *
+from settings.CONFIG import *
 from misc import move_center_gen
 
 # use this library to generate path that will work in both windows and linux
