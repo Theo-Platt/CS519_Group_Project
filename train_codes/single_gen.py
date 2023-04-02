@@ -25,12 +25,12 @@ def save_latex(path, latex, font, dvi_density):
     img = normalize_img(img)
 
     # # view result
-    cv2.imshow("centered", img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # cv2.imshow("centered", img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()
 
     # save result
-    #cv2.imwrite(str(path), img)
+    cv2.imwrite(str(path), img)
 
 
 def main():

@@ -41,7 +41,7 @@ def create_pipeline(model):
     return pipe
             
 #https://kapernikov.com/tutorial-image-classification-with-scikit-learn/
-if __name__ == "__main__":
+def main():
     classes = [NUMS_CLASSES]
     for CLASSES in classes:
         dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES)
