@@ -13,7 +13,7 @@ from misc import add_padding, black_or_white_transformer, get_shape, img_empty
 # not quite recursive right now because the recursion does not work. 
 def segmentize_recursive(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    imgs = segmentize_recur(add_padding(black_or_white_transformer(img)))
+    imgs = segmentize_recur(add_padding(img))
     return imgs
 
 # 0 if space

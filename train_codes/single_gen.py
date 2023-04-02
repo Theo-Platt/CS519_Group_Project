@@ -9,30 +9,31 @@ import os
 import imageio.v3 as iio
 import csv
 from settings.CONFIG import *
-from misc import move_center_gen
+from misc import normalize_img
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
 from pathlib import Path
 
-def save_latex(path, latex, dvi_density):
+def save_latex(path, latex, font, dvi_density):
     with open(path, 'wb') as outputfile:
-            preview(latex, viewer='BytesIO', outputbuffer=outputfile, preamble="\\usepackage{mathptmx}", dvioptions=['-D',str(dvi_density)])
+            font_fam, font_code = font
+            preamble = "\\documentclass[22pt]{minimal}\n" + f"\\usepackage{{{font_fam}}}\\fontfamily{{{font_code}}}\\selectfont" + "\\begin{document}"
+            preview(latex, viewer='BytesIO', outputbuffer=outputfile, preamble=preamble,dvioptions=['-D',str(dvi_density)])
         
     img = cv2.imread(str(path))
-    
+    img = normalize_img(img)
 
-    result = move_center_gen(img)
-    # view result
-    # cv2.imshow("result", result)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+    # # view result
+    cv2.imshow("centered", img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
 
     # save result
-    cv2.imwrite(str(path), result)
+    #cv2.imwrite(str(path), img)
 
 
-if __name__ == "__main__":
+def main():
     if which('latex') is None:
         print("Latex has not been installed")
         exit(1)
@@ -51,7 +52,7 @@ if __name__ == "__main__":
 
         for i in range(instances_num):    
             path = folder_path / f'num_{num}({i}).png'
-            save_latex(path, num, randint(DENSITY_MIN, DENSITY_MAX))
+            save_latex(path, num, font=("mathptmx", "ptm"), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
 
             dataset.append([f"{str(path)}", f"{str(num)}"])
     print("finished generating num pictures")

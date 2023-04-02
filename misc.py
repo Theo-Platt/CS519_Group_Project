@@ -28,7 +28,7 @@ def parse_data(path, labels):
                 # convert it to gray
                 my_data = cv2.cvtColor(my_data, cv2.COLOR_BGR2GRAY)
                 # black or white
-                my_data = black_or_white_transformer(my_data)
+                #my_data = black_or_white_transformer(my_data)
                 # add it to the list
                 data_list.append(my_data)
     
@@ -81,6 +81,27 @@ def move_center(img):
     # copy img image into center of result image
     result[yy:yy+ht, xx:xx+wd] = img
     return result
+
+#https://stackoverflow.com/questions/44650888/resize-an-image-without-distortion-opencv
+def resize(img):
+    img = cv2.resize(img, (100, 100), interpolation=cv2.INTER_AREA)
+    return img
+
+def normalize_img(img):
+    img = remove_whitespace(img)
+    img = resize(img)  
+    return img
+
+#https://stackoverflow.com/questions/49907382/how-to-remove-whitespace-from-an-image-in-opencv
+def remove_whitespace(img):
+    gray = img
+    if len(img.shape) == 3:
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    gray = 255*(gray < 128).astype(np.uint8) # To invert the text to white
+    coords = cv2.findNonZero(gray) # Find all non-zero points (text)
+    x, y, w, h = cv2.boundingRect(coords) # Find minimum spanning bounding box
+    img = img[y:y+h, x:x+w] # Crop the image - note we do this on the original image
+    return img
 
 # pre-process the pixels
 def black_or_white_transformer(img):

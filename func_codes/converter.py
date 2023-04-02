@@ -1,7 +1,7 @@
 # import segmentation library
 from func_codes.split import segmentize_recursive
 # misc
-from misc import move_center
+from misc import normalize_img
 import cv2
 
 class Converter:
@@ -26,15 +26,8 @@ class Converter:
         imgs_map = imgs_bundle[1]
 
         # resize image
-        x = src_img.shape[0] # height
-        y = src_img.shape[1] # width
-        if x > 100 or y > 100:
-            x_ratio = 50/ src_img.shape[0]  
-            y_ratio = 50 / src_img.shape[1]
-            src_img = cv2.resize(src_img, (100, 100))
+        src_img = normalize_img(src_img)
         
-        src_img = move_center(src_img)
-
         cv2.imshow(f'src_image {self.i}', src_img)
         self.i += 1
         
