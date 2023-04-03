@@ -22,7 +22,7 @@ if __name__ == "__main__":
 
     # convert the img to number
     converter = Converter()
-    converter.convert_img_to_latex(src)
+    print(converter.convert_img_to_latex(src))
 
-    cv2.waitKey(0)
-    cv2.destroyAllWindows() 
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows() 
