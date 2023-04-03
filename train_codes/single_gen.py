@@ -32,6 +32,10 @@ def save_latex(path, latex, font, dvi_density):
     # save result
     cv2.imwrite(str(path), img)
 
+do_nums=False
+do_chars=False
+do_ops=False
+do_comma=False
 
 def main():
     if which('latex') is None:
@@ -42,62 +46,79 @@ def main():
         exit(1)
 
     instances_num = int(input("Enter the number of pictures you want for each category: "))
+    if str(input("Generate new NUMBERS data? (y/n)\n")) =='y': do_nums = True
+    if str(input("Generate new CHARACTERS data? (y/n)\n")) =='y': do_chars = True
+    if str(input("Generate new OPERATORS data? (y/n)\n")) =='y': do_ops = True
+    if str(input("Generate new COMMAS data? (y/n)\n")) =='y': do_comma = True
+
+    if not do_nums and not do_chars and not do_ops and not do_comma:
+        print("No data generation selected. Exiting.")
+        exit(0)
 
     dataset = []
-    # numbers
-    for num in NUMS_CLASSES:
-        folder_path = NUM_PATH / f'num_{num}_folder'
-        if not os.path.exists(str(folder_path)):
-             os.makedirs(folder_path)
-            
+    if do_nums:
+        # numbers
+        for num in NUMS_CLASSES:
+            folder_path = NUM_PATH / f'num_{num}_folder'
+            if not os.path.exists(str(folder_path)):
+                os.makedirs(folder_path)
+                
 
-        rand = Random()
-        for i in range(instances_num):    
-            path = folder_path / f'num_{num}({i}).png'
-            save_latex(path, num, font=rand.choice(FONTS), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
+            rand = Random()
+            for i in range(instances_num):    
+                print(f"Generating instance {i}/{instances_num} for NUMBER {num}", end='\r')
+                path = folder_path / f'num_{num}({i}).png'
+                save_latex(path, num, font=rand.choice(FONTS), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
 
-            dataset.append([f"{str(path)}", f"{str(num)}"])
-    print("finished generating num pictures")
+                dataset.append([f"{str(path)}", f"{str(num)}"])
+        print("finished generating num pictures")
 
-    # # characters
-    # for char in CHARS_CLASSES:
-    #     folder_path = CHAR_PATH / f'char_{char}_folder'
-    #     if not os.path.exists(str(folder_path)):
-    #          os.makedirs(folder_path)
+    if do_chars:
+        # characters
+        for char in CHARS_CLASSES:
+            folder_path = CHAR_PATH / f'char_{char}_folder'
+            if not os.path.exists(str(folder_path)):
+                os.makedirs(folder_path)
 
-    #     for i in range(instances_num):    
-    #         path = folder_path / f'char_{char}({i}).png'
-    #         save_latex(path, char, randint(DENSITY_MIN, DENSITY_MAX))
+            for i in range(instances_num):    
+                print(f"Generating instance {i}/{instances_num} for CHARACTER {char}", end='\r')
+                path = folder_path / f'char_{char}({i}).png'
+                save_latex(path, char, font=rand.choice(FONTS), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
 
-    #         dataset.append([f"{str(path)}", f"{str(char)}"])
+                dataset.append([f"{str(path)}", f"{str(char)}"])
 
-    # print("finished generating characters")
+        print("finished generating characters")
 
-    # # operators
-    # for op in OPERATORS_CLASSES:
-    #     folder_path = OP_PATH / f'op_{op}_folder'
-    #     if not os.path.exists(str(folder_path)):
-    #         os.makedirs(folder_path)
+    if do_ops:
+        # operators
+        for op in OPERATORS_CLASSES:
+            folder_path = OP_PATH / f'op_{op}_folder'
+            if not os.path.exists(str(folder_path)):
+                os.makedirs(folder_path)
 
-    #     for i in range(instances_num):    
-    #         path = folder_path / f'op_{op}({i}).png'
-    #         save_latex(path, op, randint(DENSITY_MIN, DENSITY_MAX))
+            for i in range(instances_num):    
+                print(f"Generating instance {i}/{instances_num} for OPERATOR {op}", end='\r')
+                path = folder_path / f'op_{op}({i}).png'
+                save_latex(path, op, font=rand.choice(FONTS), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
 
-    #         dataset.append([f"{str(path)}", f"{str(op)}"])
-    # print("finished generating operators")
+                dataset.append([f"{str(path)}", f"{str(op)}"])
+        print("finished generating operators")
     
-    # # comma
-    # for comma in COMMAS_CLASSES:
-    #     folder_path = COMMA_PATH
-    #     if not os.path.exists(str(folder_path)):
-    #         os.makedirs(folder_path)
 
-    #     for i in range(instances_num):    
-    #         path = folder_path / f'comma({i}).png'
-    #         save_latex(path, ",", randint(DENSITY_MIN, DENSITY_MAX))
+    if do_comma:
+        # comma
+        for comma in COMMAS_CLASSES:
+            folder_path = COMMA_PATH
+            if not os.path.exists(str(folder_path)):
+                os.makedirs(folder_path)
 
-    #         dataset.append([f"{str(path)}", f"comma"])
-    # print("finished generating comma")
+            for i in range(instances_num):    
+                print(f"Generating instance {i}/{instances_num} for COMMA {comma}", end='\r')
+                path = folder_path / f'comma({i}).png'
+                save_latex(path, ",", font=rand.choice(FONTS), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
+
+                dataset.append([f"{str(path)}", f"comma"])
+        print("finished generating comma")
     
     save_file_name = "symbol_dataset.csv"
     
