@@ -7,7 +7,6 @@ import numpy as np
 from func_codes.split import segmentize_recursive
 from settings import CONFIG
 from misc import normalize_img
-from misc import selectModel
 
 
 predicted_numbers = []
@@ -30,15 +29,16 @@ def guess_recursive(imgs_bundle, models, model_classifier):
         useChars = False
         useOps = False
 
-        selected_model = model_classifier.predict(p.array([src_img]))
-        pred  = models[selected_model].predict(np.array([src_img]))
+        selected_model = model_classifier.predict(np.array([src_img]))
+        print("MODEL: ",selected_model)
+        pred  = models[selected_model[0]].predict(np.array([src_img]))
 
         predicted_numbers.extend(pred)
         #predicted_ops.extend(op)
 
-        cv2.imshow(f'src_image', src_img)
-        cv2.waitKey(0)
-        cv2.destroyAllWindows() 
+        # cv2.imshow(f'src_image', src_img)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows() 
         # print("found leaf")
     
     
@@ -46,7 +46,7 @@ def guess_recursive(imgs_bundle, models, model_classifier):
         imgs_row = imgs_map[i]
         for j in range(len(imgs_row)):
             sub_img_bundle = imgs_row[j]
-            guess_recursive(sub_img_bundle, models)
+            guess_recursive(sub_img_bundle, models, model_classifier)
 
 def main(): 
     models = load_models()
@@ -72,6 +72,6 @@ def main():
     
     expected_values = CONFIG.TEST3_VALUES.replace(" ", "")
     expected_values = [*expected_values]
-    print("Expected: ",expected_values)
-    print("numbers:  ",predicted_numbers)
+    print("Expected:    ",expected_values)
+    print("Prediction:  ",predicted_numbers)
     print('Percentage correct: ', 100 *accuracy_score(expected_values, predicted_numbers), '%')
