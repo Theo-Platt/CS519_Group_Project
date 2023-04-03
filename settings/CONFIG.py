@@ -20,10 +20,9 @@ CHARS_CLASSES = CHARS_CLASSES_LOWER
 CHARS_CLASSES.extend(CHARS_CLASSES_UPPER) 
 
 #operators
-OPERATORS_CLASSES =['(', ')','+', '-', '=']
+OPERATORS_CLASSES =['(', ')','+', '-', '=',',']
 OPERATORS_CLASSES_COMPLEX=['×', '÷']
-# comma
-COMMAS_CLASSES = [',', ""]
+
 
 # picture settings
 PICTURE_WIDHT=100

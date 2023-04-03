@@ -145,7 +145,6 @@ def load_models(exitOnFail = False, verbose=True):
     keys = [
         'NUMBERS' , 
         'CHARACTERS' , 
-        'COMMAS' , 
         'OPERATORS'
         ]
     for cl in keys:

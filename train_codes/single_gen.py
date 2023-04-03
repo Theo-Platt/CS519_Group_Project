@@ -39,7 +39,6 @@ def main():
     do_nums=False
     do_chars=False
     do_ops=False
-    do_comma=False
     if which('latex') is None:
         print("Latex has not been installed")
         exit(1)
@@ -51,7 +50,6 @@ def main():
     if str(input("Generate new NUMBERS data? (y/n)\n")) =='y': do_nums = True
     if str(input("Generate new CHARACTERS data? (y/n)\n")) =='y': do_chars = True
     if str(input("Generate new OPERATORS data? (y/n)\n")) =='y': do_ops = True
-    if str(input("Generate new COMMAS data? (y/n)\n")) =='y': do_comma = True
 
     if not do_nums and not do_chars and not do_ops and not do_comma:
         print("No data generation selected. Exiting.")
@@ -107,22 +105,7 @@ def main():
 
                     dataset.append([f"{str(path)}", f"{str(op)}"])
             print("finished generating operators           ")
-        
 
-        if do_comma:
-            # comma
-            for comma in COMMAS_CLASSES:
-                folder_path = COMMA_PATH
-                if not os.path.exists(str(folder_path)):
-                    os.makedirs(folder_path)
-
-                for i in range(instances_num):    
-                    print(f"Generating instance {i}/{instances_num} for COMMA {comma}     ", end='\r')
-                    path = folder_path / f'comma({i}).png'
-                    save_latex(path, ",", font=rand.choice(FONTS), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
-
-                    dataset.append([f"{str(path)}", f"comma"])
-            print("finished generating comma           ")
     finally:
         save_file_name = "symbol_dataset.csv"
         

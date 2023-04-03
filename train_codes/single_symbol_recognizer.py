@@ -48,8 +48,7 @@ def create_pipeline(model):
             
 #https://kapernikov.com/tutorial-image-classification-with-scikit-learn/
 def main():
-    classes = [(NUMS_CLASSES,'NUMBERS')]
-    # classes = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (COMMAS_CLASSES,'COMMAS') , (OPERATORS_CLASSES,'OPERATORS')]
+    classes = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (OPERATORS_CLASSES,'OPERATORS')]
     for CLASSES in classes:
         dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES[0])
         # print(np.array(CLASSES[0]).shape)
@@ -59,7 +58,7 @@ def main():
         # print(np.unique(y))
 
         # train test split
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
 
         # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
         # create the model
