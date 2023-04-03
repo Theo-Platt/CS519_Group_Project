@@ -76,8 +76,13 @@ def main():
 
         if do_chars:
             # characters
+            
             for char in CHARS_CLASSES:
-                folder_path = CHAR_PATH / f'char_{char}_folder'
+                lower=False
+                if char.islower(): 
+                    lower=True
+                if lower: folder_path = CHAR_PATH / f'char_{char}_folder'
+                else: folder_path = CHAR_PATH / f'char_{char}_Upper_folder'
                 if not os.path.exists(str(folder_path)):
                     os.makedirs(folder_path)
 
@@ -92,18 +97,23 @@ def main():
 
         if do_ops:
             # operators
+            op_name = ''
             for op in OPERATORS_CLASSES:
-                if op == '=': continue
-                folder_path = OP_PATH / f'op_{op}_folder'
+                if op == '×': op_name = 'times'
+                if op == '÷': op_name = 'divide'
+                if op_name == '': folder_path = OP_PATH / f'op_{op}_folder'
+                else: folder_path = OP_PATH / f'op_{op_name}_folder'
                 if not os.path.exists(str(folder_path)):
                     os.makedirs(folder_path)
 
                 for i in range(instances_num):    
                     print(f"Generating instance {i}/{instances_num} for OPERATOR {op}     ", end='\r')
-                    path = folder_path / f'op_{op}({i}).png'
+                    if op_name == '': path = folder_path / f'op_{op}({i}).png'
+                    else: path = folder_path / f'op_{op_name}({i}).png'
                     save_latex(path, op, font=rand.choice(FONTS), dvi_density=randint(DENSITY_MIN, DENSITY_MAX))
 
-                    dataset.append([f"{str(path)}", f"{str(op)}"])
+                    if op_name == '': dataset.append([f"{str(path)}", f"{str(op)}"])
+                    else: dataset.append([f"{str(path)}", f"{str(op_name)}"])
             print("finished generating operators           ")
 
     finally:

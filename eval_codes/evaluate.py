@@ -34,7 +34,7 @@ def guess_recursive(imgs_bundle, models):
         # print("start")
        
         
-        num  = models['NUMBERS'].predict(np.array([src_img]))
+        num  = models.predict(np.array([src_img]))
         #op = pipes['('].predict(np.array([src_img]))
 
         predicted_numbers.extend(num)
@@ -71,9 +71,27 @@ def main():
     
 
     imgs = segmentize_recursive(src)
-    guess_recursive(imgs, models)
     
-    expected_values = CONFIG.TEST2_VALUES.split(" ")
+    
+    
+    expected_values = CONFIG.TEST3_VALUES.replace(" ", "")
+    expected_values = [*expected_values]
+    # print(expected_values)
+
+    print("test numbers accuracy:")
+    guess_recursive(imgs, models['NUMBERS'])
+    print("Expected: ",expected_values)
+    print("numbers:  ",predicted_numbers)
+    print('Percentage correct: ', 100 *accuracy_score(expected_values, predicted_numbers), '%')
+
+    print("test characters accuracy:")
+    guess_recursive(imgs, models['CHARACTERS'])
+    print("Expected: ",expected_values)
+    print("numbers:  ",predicted_numbers)
+    print('Percentage correct: ', 100 *accuracy_score(expected_values, predicted_numbers), '%')
+
+    print("test operators accuracy:")
+    guess_recursive(imgs, models['OPERATORS'])
     print("Expected: ",expected_values)
     print("numbers:  ",predicted_numbers)
     print('Percentage correct: ', 100 *accuracy_score(expected_values, predicted_numbers), '%')
