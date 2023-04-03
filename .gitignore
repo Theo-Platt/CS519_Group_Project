@@ -133,3 +133,6 @@ myenv
 
 # folder that stores model parameters
 model_parameters*
+
+# data folder
+data
