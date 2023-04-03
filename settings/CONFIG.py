@@ -46,5 +46,5 @@ OP_MODEL_PATH=Path("./model_parameters/op.sav")
 
 # testing values
 TEST2_VALUES = "1 2 3 4 5 6 7 8 9 1 0 1 1 1 2 1 4"
-TEST3_VALUES = "3 + 4 - 5 = a 5 + a = B"
+TEST3_VALUES = "3 + 4 - 5 X a 5 + a x B"
 

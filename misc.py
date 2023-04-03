@@ -139,7 +139,8 @@ def add_padding(img):
     temp1[1:row+1, 1:col+1] = img
     return temp1
 
-def load_models(exitOnFail = False, verbose=True):
+def load_models(exitOnFail = False, verbose=True,classifier=False):
+    if classifier: load_model_classifier(exitOnFail=exitOnFail, verbose=verbose)
     # load models into dictionary
     models = {}
     keys = [
@@ -157,3 +158,16 @@ def load_models(exitOnFail = False, verbose=True):
             if verbose: print(f"failed to load model '{cl}_MODEL.bin'")
             if exitOnFail: exit(1)
     return models
+
+def load_model_classifier(exitOnFail = False, verbose=True):
+    try:
+        f = open( join(CONFIG.MODEL_FOLDER,Path(f'CLASSIFIER_MODEL.bin')), 'rb')
+        model = pickle.load(f)
+        f.close()
+        if verbose: print(f"successfully loaded model 'CLASSIFIER_MODEL.bin'")
+        return model
+    except:
+        if verbose: print(f"failed to load model 'CLASSIFIER_MODEL.bin'")
+        if exitOnFail: exit(1)
+        return
+    
