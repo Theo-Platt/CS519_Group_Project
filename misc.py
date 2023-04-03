@@ -94,8 +94,12 @@ def resize(img):
     return img
 
 def normalize_img(img):
-    img = remove_whitespace(img)
-    img = resize(img)  
+    trimmed_img = remove_whitespace(img)
+    # if trimmed_img.shape[0] == 0 or trimmed_img.shape[1] == 0:
+    #     cv2.imshow("centered", img)
+    #     cv2.waitKey(0)
+    #     cv2.destroyAllWindows()
+    img = resize(trimmed_img)  
     return img
 
 #https://stackoverflow.com/questions/49907382/how-to-remove-whitespace-from-an-image-in-opencv
@@ -103,7 +107,7 @@ def remove_whitespace(img):
     gray = img
     if len(img.shape) == 3:
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    gray = 255*(gray < 128).astype(np.uint8) # To invert the text to white
+    gray = 255*(gray < 195).astype(np.uint8) # To invert the text to white
     coords = cv2.findNonZero(gray) # Find all non-zero points (text)
     x, y, w, h = cv2.boundingRect(coords) # Find minimum spanning bounding box
     img = img[y:y+h, x:x+w] # Crop the image - note we do this on the original image
