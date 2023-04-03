@@ -144,7 +144,7 @@ def add_padding(img):
     return temp1
 
 def load_models(exitOnFail = False, verbose=True,classifier=False):
-    if classifier: load_model_classifier(exitOnFail=exitOnFail, verbose=verbose)
+    if classifier: return load_model_classifier(exitOnFail=exitOnFail, verbose=verbose)
     # load models into dictionary
     models = {}
     keys = [
