@@ -6,6 +6,7 @@ from settings import CONFIG
 import pickle
 from os.path import join
 from pathlib import Path
+from sklearn.metrics import accuracy_score
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
@@ -175,3 +176,7 @@ def load_model_classifier(exitOnFail = False, verbose=True):
         if exitOnFail: exit(1)
         return
     
+def run_test_input_accuracy(expected,predicted):
+    print("Expected:    ",expected)
+    print("Prediction:  ",predicted)
+    print(f'Percentage correct: {100 *accuracy_score(expected,predicted)}%')

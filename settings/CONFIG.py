@@ -9,8 +9,10 @@ OP_PATH = DATA_FOLDER / "operators"
 COMMA_PATH = DATA_FOLDER / "comma"
 SINGLE_GEN_CSV_PATH= DATA_FOLDER / "symbol_dataset.csv"
 MODEL_FOLDER = Path("./trained_models/")
-TEST_IMAGE = Path('./eval_codes/test3.png')
 
+############
+### Data ###
+############
 # nums
 NUMS_CLASSES = ['0','1','2','3','4','5','6','7','8','9']
 # characters
@@ -18,7 +20,6 @@ CHARS_CLASSES_LOWER= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o
 CHARS_CLASSES_UPPER = list(x.upper() for x in CHARS_CLASSES_LOWER)
 CHARS_CLASSES = CHARS_CLASSES_LOWER
 CHARS_CLASSES.extend(CHARS_CLASSES_UPPER) 
-
 #operators
 OPERATORS_CLASSES =['(', ')','+', '-', '=',',','×', '÷']
 OPERATORS_CLASSES_COMPLEX=[]
@@ -44,7 +45,26 @@ NUM_MODEL_PATH=Path("./model_parameters/num.sav")
 CHAR_MODEL_PATH=Path("./model_parameters/char.sav")
 OP_MODEL_PATH=Path("./model_parameters/op.sav")
 
-# testing values
-TEST2_VALUES = "1 2 3 4 5 6 7 8 9 1 0 1 1 1 2 1 4"
-TEST3_VALUES = "3 + 4 - 5 X a 5 + a x B"
+#############      
+### Tests ###
+#############
+# testing values: tuple of (actual_value, correct_model)
+#note: evaluate will convert the model classificaton as follows
+#      1: "NUMBERS"
+#      2: "OPERATORS"
+#      3: "CHARACTERS"
+#note: Test 1 does not work as the equals sign is read improperly by the image parser.
+TEST_1 = ("2 x - 3 = - 7",                # actual symbols in image 
+          [1,3,2,1,2,2,1],                # correct model to classify symbols by
+          Path('./eval_codes/test1.png')) # path to test1.png image
 
+TEST_2 = ("1 2 3 4 5 6 7 8 9 1 0 1 1 1 2 1 4", # actual symbols in image 
+          [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], # correct model to classify symbols by
+          Path('./eval_codes/test2.png'))      # path to test2.png image
+
+TEST_3 = ("3 + 4 - 5 X a 5 + a x B",      # actual symbols in image 
+          [1,2,1,2,1,3,3,1,2,3,3,3],      # correct model to classify symbols by
+          Path('./eval_codes/test3.png')) # path to test3.png image
+
+TEST_INPUT = TEST_2
+TEST_IMAGE = TEST_INPUT[2]

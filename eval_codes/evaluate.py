@@ -1,16 +1,21 @@
 import cv2
 from pathlib import Path
-from sklearn.metrics import accuracy_score
 from misc import move_center
 from misc import load_models
 import numpy as np
 from func_codes.split import segmentize_recursive
 from settings import CONFIG
 from misc import normalize_img
+from misc import run_test_input_accuracy
 
 
-predicted_numbers = []
-predicted_ops = []
+predicted_symbols = []
+predicted_models = []
+model_evaluator = {
+    "NUMBERS": 1,
+    "OPERATORS":2,
+    "CHARACTERS":3,
+}
 
 def guess_recursive(imgs_bundle, models, model_classifier):
     if imgs_bundle is None:
@@ -24,23 +29,19 @@ def guess_recursive(imgs_bundle, models, model_classifier):
     if len(imgs_map) == 1 and x <= 100 and y <= 100:
         src_img = move_center(src_img)
         src_img = normalize_img(src_img)
-        
-        useNums = False
-        useChars = False
-        useOps = False
 
+        # add predicted model to solution
         selected_model = model_classifier.predict(np.array([src_img]))
-        print("MODEL: ",selected_model)
         pred  = models[selected_model[0]].predict(np.array([src_img]))
 
-        predicted_numbers.extend(pred)
-        #predicted_ops.extend(op)
+        selected = selected_model[0]
+        selected = model_evaluator[selected]
+        predicted_models.append(selected)
+        predicted_symbols.extend(pred)
 
         # cv2.imshow(f'src_image', src_img)
         # cv2.waitKey(0)
         # cv2.destroyAllWindows() 
-        # print("found leaf")
-    
     
     for i in range(len(imgs_map)):
         imgs_row = imgs_map[i]
@@ -49,10 +50,11 @@ def guess_recursive(imgs_bundle, models, model_classifier):
             guess_recursive(sub_img_bundle, models, model_classifier)
 
 def main(): 
+    #load models and classifiers
     models = load_models()
     model_classifier = load_models(classifier=True)
-    # print(models)
-    # exit(0)
+
+    #read images
     try:
         src = cv2.imread(CONFIG.TEST_IMAGE.__str__())
         # cv2.imshow(f'src', src)
@@ -66,12 +68,30 @@ def main():
             print('Could not open or find the image.')
             exit(0)
     
+    #prepare expected values
+    expected_values = CONFIG.TEST_INPUT[0].replace(" ", "")
+    expected_values = [*expected_values]
 
+    #make predictions
     imgs = segmentize_recursive(src)
     guess_recursive(imgs, models,model_classifier)
     
-    expected_values = CONFIG.TEST3_VALUES.replace(" ", "")
-    expected_values = [*expected_values]
-    print("Expected:    ",expected_values)
-    print("Prediction:  ",predicted_numbers)
-    print('Percentage correct: ', 100 *accuracy_score(expected_values, predicted_numbers), '%')
+    #accuracy of model prediction
+    print("\nModel Selection accuracy")
+    run_test_input_accuracy(CONFIG.TEST_INPUT[1],predicted_models)
+    
+    #accuracy of symbol prediction
+    print("\nSymbol Prediction accuracy")
+    run_test_input_accuracy(expected_values,predicted_symbols)
+
+    #accuracy of symbol prediction filtering out misclassified models
+    filtered_expected_values =[]
+    filtered_predicted_symbols =[]
+    for i in range(len(predicted_models)):
+        if predicted_models[i] == CONFIG.TEST_INPUT[1][i]:
+            filtered_expected_values.append(expected_values[i])
+            filtered_predicted_symbols.append(predicted_symbols[i])
+    print("\nSymbol Prediction accuracy (excluding improperly classified model selection)")
+    run_test_input_accuracy(filtered_expected_values,filtered_predicted_symbols)
+
+    
