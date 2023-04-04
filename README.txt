@@ -3,7 +3,7 @@ Long Tran & Theoderic T. Platt
 CS-519-M01; Dr. Huiping Cao
 
 # Running the code
-'python tools.py <extension>'
+'python tools.py extension'
 
 To run our project, an extension must be supplied. Available extensions are as follows:
 generate -- generates a new dataset of the selected number of instances per class. WARNING: this will overwrite the existing dataset and can be very time-consuming.
