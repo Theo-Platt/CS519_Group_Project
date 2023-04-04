@@ -1,8 +1,14 @@
-PS2 team.txt
+PS4 team.txt
 Work allocation at this stage:
 
 Long Tran
-  - Collaborated on the report, sourcing data, and defining the problem scope
+  - Collaborated on the report.
+  - Collaborated on data generation.
+  - Collaborated on model generation.
+  - Collaborated on Testing.
 
 Theo Platt
-  - Collaborated on the report, sourcing data, and defining the problem scope
+  - Collaborated on the report.
+  - Collaborated on data generation.
+  - Collaborated on model generation.
+  - Collaborated on Testing.
