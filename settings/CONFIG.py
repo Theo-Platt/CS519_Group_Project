@@ -6,7 +6,7 @@ DATA_FOLDER = Path("./data/")
 NUM_PATH = DATA_FOLDER / "nums"
 CHAR_PATH = DATA_FOLDER / "chars" 
 OP_PATH = DATA_FOLDER / "operators" 
-COMMA_PATH = DATA_FOLDER / "comma"
+PIECWISE_PATH = DATA_FOLDER / "piecwise"
 SINGLE_GEN_CSV_PATH= DATA_FOLDER / "symbol_dataset.csv"
 MODEL_FOLDER = Path("./trained_models/")
 
@@ -20,9 +20,13 @@ CHARS_CLASSES_LOWER= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o
 CHARS_CLASSES_UPPER = list(x.upper() for x in CHARS_CLASSES_LOWER)
 CHARS_CLASSES = CHARS_CLASSES_LOWER
 CHARS_CLASSES.extend(CHARS_CLASSES_UPPER) 
-#operators
+# operators
 OPERATORS_CLASSES =['(', ')','+', '-', '=',',','×', '÷']
 OPERATORS_CLASSES_COMPLEX=[]
+# all
+FULL_CLASSES = NUMS_CLASSES
+FULL_CLASSES.extend(CHARS_CLASSES)
+FULL_CLASSES.extend(OPERATORS_CLASSES)
 
 
 # picture settings
