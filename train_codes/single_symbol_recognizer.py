@@ -20,6 +20,8 @@ import pickle
 import cv2
 from func_codes.split import segmentize_recursive, show_recursive
 
+from train_codes.cnn_models import CNNClassifier1
+
 
 # use this library to generate path that will work in both windows and linux
 # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
@@ -99,10 +101,11 @@ def main():
         # create the model
         # model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
         # model = Perceptron()
-        model= DecisionTreeClassifier()
-
+        model= CNNClassifier1()
+        
         # train
-        pipe = create_pipeline(model)
+        #pipe = create_pipeline(model)
+        pipe = CNNClassifier1()
         pipe.fit(X_train, y_train)
 
         # test the data
