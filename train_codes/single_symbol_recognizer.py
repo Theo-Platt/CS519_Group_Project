@@ -20,7 +20,7 @@ import pickle
 import cv2
 from func_codes.split import segmentize_recursive, show_recursive
 
-from train_codes.cnn_models import CNNClassifier1
+from train_codes.cnn_models import CNNClassifier1, CNNClassifierInter
 
 
 # use this library to generate path that will work in both windows and linux
@@ -78,11 +78,13 @@ def save_pipeline(pipe, class_name, X_test):
 #https://kapernikov.com/tutorial-image-classification-with-scikit-learn/
 def main():
     classes = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (OPERATORS_CLASSES,'OPERATORS')]
+    labels = []
     X_intra = []
     y_intra = []
     for CLASSES in classes:
         dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES[0])
 
+        labels.append(CLASSES[1])
         # add these data for the intra classes classifier
         for element in X:
             X_intra.append(element)
@@ -99,24 +101,23 @@ def main():
 
         # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
         # create the model
-        # model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
+        #model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
         # model = Perceptron()
-        model= CNNClassifier1()
         
         # train
-        #pipe = create_pipeline(model)
-        pipe = CNNClassifier1()
-        pipe.fit(X_train, y_train)
+        # pipe = create_pipeline(model)
+        # pipe = CNNClassifier1()
+        # pipe.fit(X_train, y_train)
 
         # test the data
-        y_pred_train = pipe.predict(X_train)
-        y_pred_test  = pipe.predict(X_test)
-        print("This model has the following accuracy scores:")
-        print('  Training percentage: ', 100 *accuracy_score(y_train, y_pred_train),'%')
-        print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
+        # y_pred_train = pipe.predict(X_train)
+        # y_pred_test  = pipe.predict(X_test)
+        # print("This model has the following accuracy scores:")
+        # print('  Training percentage: ', 100 *accuracy_score(y_train, y_pred_train),'%')
+        # print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
 
         # save pipeline
-        save_pipeline(pipe, CLASSES[1], X_test)
+        # save_pipeline(pipe, CLASSES[1], X_test)
 
     X = np.array(X_intra)
     y = np.array(y_intra)
@@ -128,14 +129,8 @@ def main():
     # train test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
 
-    # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
-    # create the model
-    # model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
-    # model = Perceptron()
-    model= DecisionTreeClassifier()
-
     # train
-    pipe = create_pipeline(model)
+    pipe = CNNClassifierInter(epochs=10, labels=labels)
     pipe.fit(X_train, y_train)
 
     # test the data
@@ -146,5 +141,5 @@ def main():
     print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
 
     # save pipeline
-    save_pipeline(pipe, "CLASSIFIER", X_test)
+    #save_pipeline(pipe, "CLASSIFIER", X_test)
 
