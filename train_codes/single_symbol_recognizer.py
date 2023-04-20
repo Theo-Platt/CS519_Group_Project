@@ -106,7 +106,7 @@ def main():
         
         # train
         pipe = create_pipeline(model)
-        pipe = CNNClassifier1()
+        # pipe = CNNClassifier1()
         pipe.fit(X_train, y_train)
 
         # test the data
