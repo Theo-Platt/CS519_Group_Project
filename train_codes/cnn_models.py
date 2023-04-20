@@ -150,6 +150,7 @@ class CNNClassifierInter:
 
         # training
         for epoch in range(self.num_epochs):
+            print(f'Training epoch {epoch}/{self.num_epochs}',end='\r')
             self.model.train()
             for x_batch, y_batch in train_dl:
                 # IMPORTANT
@@ -171,6 +172,7 @@ class CNNClassifierInter:
                 self.optimizer.zero_grad()
                 
                 #calculate loss, accuracy
+        print()
 
     # predict the input
     # input: Expecting a NumPy 2D matrix containing the features of each instance. 
