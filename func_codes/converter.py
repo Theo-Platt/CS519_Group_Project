@@ -22,27 +22,46 @@ class Converter:
 
     # convert an image map to LaTex
     # not finished
-    def convert(self, imgs_bundle):
+    def convert(self, imgs_bundle, top=True):
         if imgs_bundle is None:
-            return " "
+            return ""
         
         # the source image
         src_img = imgs_bundle[0]
         # it sub images 
         imgs_map = imgs_bundle[1]
 
-        # resize image
-        src_img = normalize_img(src_img)
-        # predict it
-        result = self.predict(src_img)
+        # only does this on leaf
+        result = ""
+        if len(imgs_map) <= 1:
+            # resize image
+            src_img = normalize_img(src_img)
 
+            #print(imgs_map.shape)
+            # cv2.imshow(f'src_image', src_img)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
+            # predict it
+            result = self.predict(src_img)
+
+            return result
+        
+
+        # manage each individula subnodes. 
         for i in range(len(imgs_map)):
             imgs_row = imgs_map[i]
+            empty_row = True
             for j in range(len(imgs_row)):
                 sub_img_bundle = imgs_row[j]
-                result += self.convert(sub_img_bundle)
-            result += "\n"
-        
+                if sub_img_bundle is not None:
+                    # show the image
+                    empty_row = False
+                elif top:
+                    result += " "    
+                result += self.convert(sub_img_bundle, top=False)
+                
+            if top and not empty_row:
+                result += "\n"
         return result
 
     def predict(self, src_img):

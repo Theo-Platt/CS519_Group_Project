@@ -49,6 +49,8 @@ def guess_recursive(imgs_bundle, models, model_classifier):
             sub_img_bundle = imgs_row[j]
             guess_recursive(sub_img_bundle, models, model_classifier)
 
+    return predicted_models, predicted_symbols
+
 def main(): 
     #load models and classifiers
     models = load_models()
