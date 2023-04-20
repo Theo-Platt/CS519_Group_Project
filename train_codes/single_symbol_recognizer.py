@@ -130,7 +130,7 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
 
     # train
-    pipe = CNNClassifierInter(epochs=10, labels=labels)
+    pipe = CNNClassifierInter(epochs=50, labels=labels)
     pipe.fit(X_train, y_train)
 
     # test the data
@@ -141,5 +141,5 @@ def main():
     print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
 
     # save pipeline
-    #save_pipeline(pipe, "CLASSIFIER", X_test)
+    save_pipeline(pipe, "CLASSIFIER", X_test)
 

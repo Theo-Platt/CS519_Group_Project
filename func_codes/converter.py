@@ -38,9 +38,9 @@ class Converter:
             src_img = normalize_img(src_img)
 
             #print(imgs_map.shape)
-            cv2.imshow(f'src_image', src_img)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()
+            # cv2.imshow(f'src_image', src_img)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
             # predict it
             result = self.predict(src_img)
 
