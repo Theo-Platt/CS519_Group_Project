@@ -86,9 +86,9 @@ def main():
     doSC=False #single classes (NUMBERS, CHARACTERS, OPERATORS)
     doIC=False #intra class
     doPW=False #piecewise class
-    if input("Train single classes?  (y/n) ") == 'y': doSC=True
-    if input("Train intraclass?      (y/n) ") == 'y': doIC=True
-    if input("Train intraclass?      (y/n) ") == 'y': doPW=True
+    if input("Train single classes?  (y/n): ") == 'y': doSC=True
+    if input("Train intraclass?      (y/n): ") == 'y': doIC=True
+    if input("Train intraclass?      (y/n): ") == 'y': doPW=True
     
 
     for CLASSES in classes:
@@ -173,3 +173,25 @@ def main():
         for element in X:
             X_intra.append(element)
             y_intra.append(CLASSES[1])
+
+        X = np.array(X_intra)
+        y = np.array(y_intra)
+        # print('\n\ny_intra: ',y_intra)
+        print(f"Training piecwise class:")
+
+        # train test split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
+
+        # train
+        pipe = CNNClassifierInter(epochs=50, labels=labels)
+        pipe.fit(X_train, y_train)
+
+        # test the data
+        y_pred_train = pipe.predict(X_train)
+        y_pred_test  = pipe.predict(X_test)
+        print("This model has the following accuracy scores:")
+        print('  Training percentage: ', 100 *accuracy_score(y_train, y_pred_train),'%')
+        print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
+
+        # save pipeline
+        save_pipeline(pipe, "CLASSIFIER", X_test)
