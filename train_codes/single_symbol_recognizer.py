@@ -77,18 +77,33 @@ def save_pipeline(pipe, class_name, X_test):
             
 #https://kapernikov.com/tutorial-image-classification-with-scikit-learn/
 def main():
-    classes = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (OPERATORS_CLASSES,'OPERATORS')]
+    classes  = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (OPERATORS_CLASSES,'OPERATORS')]
+    pw_class =  (PIECEWISE_CLASSES,'PIECEWISE')
     labels = []
     X_intra = []
     y_intra = []
-    if input("Would you like to train NUMBERS, CHARACTERS, and OPERATORS models? (y/n)") == 'y':
-        for CLASSES in classes:
-            dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES[0])
+    # Which classes to train
+    doSC=False #single classes (NUMBERS, CHARACTERS, OPERATORS)
+    doIC=False #intra class
+    doPW=False #piecewise class
+    if input("Train single classes?  (y/n) ") == 'y': doSC=True
+    if input("Train intraclass?      (y/n) ") == 'y': doIC=True
+    if input("Train intraclass?      (y/n) ") == 'y': doPW=True
+    
 
-            labels.append(CLASSES[1])
-            # add these data for the intra classes classifier
-            
+    for CLASSES in classes:
+        dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES[0])
 
+        labels.append(CLASSES[1])
+        # add these data for the intra classes classifier
+        for element in X:
+            X_intra.append(element)
+            y_intra.append(CLASSES[1])
+
+        ####################
+        ### single class ###
+        ####################
+        if doSC:
             # print(np.array(CLASSES[0]).shape)
             # print(CLASSES[0])
             print(f"Training dataset: {CLASSES[1]}")
@@ -117,17 +132,14 @@ def main():
 
             # save pipeline
             save_pipeline(pipe, CLASSES[1], X_test)
-        
 
 
-    if input("Would you like to train IntraClass model? (y/n)")=='y':
-        X = np.array(X_intra)   
+    ##################
+    ### intraclass ###
+    ##################
+    if doIC:
+        X = np.array(X_intra)
         y = np.array(y_intra)
-        for CLASSES in classes:
-            dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES[0])
-        for element in X:
-            X_intra.append(element)
-            y_intra.append(CLASSES[1])
 
         # print('\n\ny_intra: ',y_intra)
 
@@ -150,30 +162,14 @@ def main():
         # save pipeline
         save_pipeline(pipe, "CLASSIFIER", X_test)
 
+    #################
+    ### piecewise ###
+    #################
+    if doPW:
+        dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, pw_class[0])
 
-
-    if input("Would you like to train IntraClass model? (y/n)")=='y':
-        X = np.array(X_intra)
-        y = np.array(y_intra)
-        dataset, X, y = parse_data(PIECEWISE_GEN_CSV_PATH)
+        labels.append(pw_class[1])
+        # add these data for the intra classes classifier
         for element in X:
-                X_intra.append(element)
-                y_intra.append(CLASSES[1])
-        print(f"Training Piecewise:")
-
-        # train test split
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
-
-        # train
-        pipe = CNNClassifierInter(epochs=50, labels=labels)
-        pipe.fit(X_train, y_train)
-
-        # test the data
-        y_pred_train = pipe.predict(X_train)
-        y_pred_test  = pipe.predict(X_test)
-        print("This model has the following accuracy scores:")
-        print('  Training percentage: ', 100 *accuracy_score(y_train, y_pred_train),'%')
-        print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
-
-        # save pipeline
-        save_pipeline(pipe, "PIECEWISE", X_test)
+            X_intra.append(element)
+            y_intra.append(CLASSES[1])
