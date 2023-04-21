@@ -88,7 +88,7 @@ def main():
     doPW=False #piecewise class
     if input("Train single classes?  (y/n): ") == 'y': doSC=True
     if input("Train intraclass?      (y/n): ") == 'y': doIC=True
-    if input("Train intraclass?      (y/n): ") == 'y': doPW=True
+    if input("Train piecewise class? (y/n): ") == 'y': doPW=True
     
 
     for CLASSES in classes:
@@ -194,4 +194,4 @@ def main():
         print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
 
         # save pipeline
-        save_pipeline(pipe, "CLASSIFIER", X_test)
+        save_pipeline(pipe, "PIECEWISE", X_test)

@@ -17,7 +17,7 @@ model_evaluator = {
     "CHARACTERS":3,
 }
 
-def guess_recursive(imgs_bundle, models, model_classifier):
+def guess_recursive(imgs_bundle, models, model_classifier,model_piecewise):
     if imgs_bundle is None:
         return
     
@@ -47,14 +47,15 @@ def guess_recursive(imgs_bundle, models, model_classifier):
         imgs_row = imgs_map[i]
         for j in range(len(imgs_row)):
             sub_img_bundle = imgs_row[j]
-            guess_recursive(sub_img_bundle, models, model_classifier)
+            guess_recursive(sub_img_bundle, models, model_classifier,model_piecewise)
 
     return predicted_models, predicted_symbols
 
 def main(): 
     #load models and classifiers
     models = load_models()
-    model_classifier = load_models(classifier=True)
+    model_classifier = load_models(specific='classifier')
+    model_piecewise  = load_models(specific='piecewise')
 
     #read images
     try:
@@ -76,7 +77,7 @@ def main():
 
     #make predictions
     imgs = segmentize_recursive(src)
-    guess_recursive(imgs, models,model_classifier)
+    guess_recursive(imgs, models,model_classifier,model_piecewise)
     
     #accuracy of model prediction
     print("\nModel Selection accuracy")
