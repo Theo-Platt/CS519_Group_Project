@@ -96,10 +96,9 @@ def resize(img):
 
 def normalize_img(img):
     trimmed_img = remove_whitespace(img)
-    # if trimmed_img.shape[0] == 0 or trimmed_img.shape[1] == 0:
-    #     cv2.imshow("centered", img)
-    #     cv2.waitKey(0)
-    #     cv2.destroyAllWindows()
+    # shape is 0
+    if trimmed_img.shape[0] <= 0 or trimmed_img.shape[1] <= 0:
+        return None
     img = resize(trimmed_img)  
     return img
 

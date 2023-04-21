@@ -21,7 +21,7 @@ CHARS_CLASSES_UPPER = list(x.upper() for x in CHARS_CLASSES_LOWER)
 CHARS_CLASSES = CHARS_CLASSES_LOWER
 CHARS_CLASSES.extend(CHARS_CLASSES_UPPER) 
 #operators
-OPERATORS_CLASSES =['(', ')','+', '-', '=',',','×', '÷']
+OPERATORS_CLASSES =['(', ')','+', '-', '=',',','times', 'divide']
 OPERATORS_CLASSES_COMPLEX=[]
 
 

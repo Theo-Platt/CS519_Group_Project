@@ -34,12 +34,19 @@ class Converter:
         # only does this on leaf
         result = ""
         if len(imgs_map) <= 1:       
+            # cv2.imshow(f'src_image', src_img)
+            # print(src_img.shape)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
             # resize image
-            src_img = normalize_img(src_img)    
+            src_img = normalize_img(src_img)  
+            if src_img is None:
+                return ""  
             # predict it
             result = self.predict(src_img)
             #print("predicted to be", result)
-
+            if result == "times":
+                return "×"
             # cv2.imshow(f'src_image', src_img)
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()
@@ -49,9 +56,7 @@ class Converter:
 
         # manage each individula subnodes. 
         #print("size: ", len(imgs_map), len(imgs_map[0]))
-        # cv2.imshow(f'src_image', src_img)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows()
+     
         for i in range(len(imgs_map)):
             imgs_row = imgs_map[i]
             empty_row = True
@@ -80,18 +85,18 @@ class Converter:
 
         # special case for division
         if len(imgs_map) == 7 and len(imgs_map[0]) == 3:
-            if imgs_map[1][1] == "o" and imgs_map[3][1] == "-" and imgs_map[5][1] == "o":
-                print("i'm here")
+            #print("tu", imgs_map[1][1], imgs_map[3][1], imgs_map[5][1])
+            if imgs_map[1][1] != None and imgs_map[3][1] == "-" and imgs_map[5][1] != None:
                  # resize image
                 src_img = normalize_img(src_img)
 
-                cv2.imshow(f'src_image', src_img)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()
+                
+
                 temp = self.predict(src_img)
+                
                 print("what was it", temp)
-                if temp == "÷":
-                    return temp
+                if temp == "divide":
+                    return "÷"
                 
         # special case for i
         if len(imgs_map) == 5 and len(imgs_map[0]) == 3:

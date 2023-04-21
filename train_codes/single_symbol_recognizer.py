@@ -103,7 +103,7 @@ def main():
         # create the model
         model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
         # model = Perceptron()
-        
+        print(np.unique(y))
         # train
         pipe = create_pipeline(model)
         # pipe = CNNClassifier1()
