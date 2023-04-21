@@ -16,6 +16,10 @@ def segmentize_recursive(img):
     imgs = segmentize_recur(add_padding(img))
     return imgs
 
+def segmentize_recursive_nocolor(img):
+    imgs = segmentize_recur(add_padding(img))
+    return imgs
+
 # 0 if space
 # not 0 if not space. 
 def get_horizontal_hist(img, col):

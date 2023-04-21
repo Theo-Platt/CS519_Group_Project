@@ -1,5 +1,5 @@
 # import segmentation library
-from func_codes.split import segmentize_recursive
+from func_codes.split import segmentize_recursive, segmentize_recursive_nocolor
 # misc
 from misc import normalize_img, move_center, load_models
 import cv2
@@ -34,11 +34,14 @@ class Converter:
         # only does this on leaf
         result = ""
         if len(imgs_map) <= 1:       
+            # print(src_img.shape)
+            # imgs = segmentize_recursive_nocolor(src_img)
+            # print(len(imgs[1]), len(imgs[1][0]))
             # cv2.imshow(f'src_image', src_img)
             # print(src_img.shape)
             # cv2.waitKey(0)
             # cv2.destroyAllWindows()
-            # resize image
+            #resize image
             src_img = normalize_img(src_img)  
             if src_img is None:
                 return ""  
@@ -94,7 +97,6 @@ class Converter:
 
                 temp = self.predict(src_img)
                 
-                print("what was it", temp)
                 if temp == "divide":
                     return "÷"
                 
