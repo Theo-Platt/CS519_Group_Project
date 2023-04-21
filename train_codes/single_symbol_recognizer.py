@@ -20,7 +20,7 @@ import pickle
 import cv2
 from func_codes.split import segmentize_recursive, show_recursive
 
-from train_codes.cnn_models import CNNClassifier1, CNNClassifierInter
+from train_codes.cnn_models import CNNClassifier1, CNNClassifierInter,CNNClassifierPiecewise
 
 
 # use this library to generate path that will work in both windows and linux
@@ -183,7 +183,7 @@ def main():
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
 
         # train
-        pipe = CNNClassifierInter(epochs=50, labels=labels)
+        pipe = CNNClassifierPiecewise(epochs=50, labels=labels)
         pipe.fit(X_train, y_train)
 
         # test the data
