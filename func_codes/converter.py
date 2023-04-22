@@ -11,7 +11,6 @@ class Converter:
         self.i = 0
         self.models = load_models()
         self.model_classifier = load_models(specific="classifier")
-        
     
     # convert an image to latex
     def convert_img_to_latex(self, img):

@@ -177,11 +177,11 @@ def main():
         labels.append(pw_class[1])
         # add these data for the intra classes classifier
         for element in X:
-            X_intra.append(element)
-            y_intra.append(CLASSES[1])
+            X_pw.append(element)
+            y_pw.append(CLASSES[1])
 
-        X = np.array(X_intra)
-        y = np.array(y_intra)
+        X = np.array(X_pw)
+        y = np.array(y_pw)
         # print('\n\ny_intra: ',y_intra)
         print(f"Training piecwise class:")
 
