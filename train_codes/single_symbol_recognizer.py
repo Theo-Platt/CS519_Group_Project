@@ -148,6 +148,12 @@ def main():
         # train test split
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
 
+        # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
+        # create the model
+        model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
+        # model = Perceptron()
+        print(np.unique(y))
+
         # train
         pipe = CNNClassifierInter(epochs=50, labels=labels)
         pipe.fit(X_train, y_train)
