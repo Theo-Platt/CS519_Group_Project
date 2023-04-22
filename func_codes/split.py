@@ -138,7 +138,64 @@ def segmentize_recur(img, old_img=np.array([[]])):
     return (img, sub_imges_map)
 
 
+def segmentize_col_nocolor(img):
+    # the rgb of white is (255, 255, 255)
+    gray_img = img#cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img_row = len(gray_img)
+    img_col =  len(gray_img[0])
+
+    # vertical_hsit
+    vertical_hist = get_vertical_hist(gray_img, img_row)
+
+    # get the boundary
+    cols = []
+
+    space_found = False
+    for i in range(len(vertical_hist[0])):
+        value = round(vertical_hist[0][i],)
+        if space_found and value > 0 and i > 0:
+            #cv2.line(src, (i-1, 0), (i-1, img_row), (255, 0, 0))
+            cols.append(i-1)
+            space_found = False
+        elif value <= 0:
+            if not space_found:
+                #cv2.line(src, (i, 0), (i, img_row), (255, 0, 0))
+                cols.append(i)
+            space_found = True
+
+    # crop the images. 
+    # check for empty
+    # padding
+    # add add the result
+    final_result = np.array([None for i in range(len(cols))])
+
+    for j in range(len(cols)-1):
+        row_s = 0
+        row_e = img_row
+        col_s = cols[j]
+        col_e = cols[j+1]
+        
+        # crop
+        img =  gray_img[row_s:row_e, col_s:col_e]
+
+        # empty
+        shape = get_shape(img)
+        if shape[0] == 0 or shape[1] == 0:
+            continue
+        if img_empty(img):
+            continue
+
+        # add padding
+        img = add_padding(img)
+
+        # add to final result
+        final_result[j] = img
+
+    return final_result
+
+# segmentize by row
 def segmentize_row(img):
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     gray_img = img#cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img_row = len(gray_img)
     img_col =  len(gray_img[0])
@@ -146,9 +203,6 @@ def segmentize_row(img):
     
     # vertical hist
     horizontal_hist = get_horizontal_hist(gray_img, img_col)
-
-    # vertical_hsit
-    vertical_hist = get_vertical_hist(gray_img, img_row)
 
     # get the boundary
     rows = []
@@ -182,6 +236,11 @@ def segmentize_row(img):
         
         # crop
         img =  gray_img[row_s:row_e, col_s:col_e]
+
+        # cv2.imshow(f'src_image', img)
+        # cv2.setWindowProperty('src_image', cv2.WINDOW_AUTOSIZE, 1)
+        # cv2.waitKey(0)
+        # cv2.destroyAllWindows()  
 
         # empty
         shape = get_shape(img)
