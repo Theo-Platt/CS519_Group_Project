@@ -96,10 +96,9 @@ def resize(img):
 
 def normalize_img(img):
     trimmed_img = remove_whitespace(img)
-    # if trimmed_img.shape[0] == 0 or trimmed_img.shape[1] == 0:
-    #     cv2.imshow("centered", img)
-    #     cv2.waitKey(0)
-    #     cv2.destroyAllWindows()
+    # shape is 0
+    if trimmed_img.shape[0] <= 0 or trimmed_img.shape[1] <= 0:
+        return None
     img = resize(trimmed_img)  
     return img
 
@@ -130,7 +129,7 @@ def black_or_white_transformer(img):
 
 def img_empty(img):
     for x in np.nditer(img):
-        if x != 255:
+        if (255 - x) > 2:
             return False
     
     return True
@@ -144,8 +143,9 @@ def add_padding(img):
     temp1[1:row+1, 1:col+1] = img
     return temp1
 
-def load_models(exitOnFail = False, verbose=True,classifier=False):
-    if classifier: return load_model_classifier(exitOnFail=exitOnFail, verbose=verbose)
+def load_models(exitOnFail = False, verbose=True,specific=''):
+    if specific == 'classifier': return load_model_classifier(exitOnFail=exitOnFail, verbose=verbose)
+    if specific == 'piecewise':  return load_model_piecewise(exitOnFail=exitOnFail, verbose=verbose)
     # load models into dictionary
     models = {}
     keys = [
@@ -173,6 +173,18 @@ def load_model_classifier(exitOnFail = False, verbose=True):
         return model
     except:
         if verbose: print(f"failed to load model 'CLASSIFIER_MODEL.bin'")
+        if exitOnFail: exit(1)
+        return
+
+def load_model_piecewise(exitOnFail = False, verbose=True):
+    try:
+        f = open( join(CONFIG.MODEL_FOLDER,Path(f'PIECEWISE_MODEL.bin')), 'rb')
+        model = pickle.load(f)
+        f.close()
+        if verbose: print(f"successfully loaded model 'PIECEWISE_MODEL.bin'")
+        return model
+    except:
+        if verbose: print(f"failed to load model 'PIECEWISE_MODEL.bin'")
         if exitOnFail: exit(1)
         return
     

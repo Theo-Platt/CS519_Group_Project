@@ -41,7 +41,7 @@ def main():
 
     #make predictions
     imgs = segmentize_recursive(src)
-    predicted_models, predicted_symbols = guess_recursive(imgs, models,model_classifier)
+    predicted_models, predicted_symbols = guess_recursive(imgs, models,model_classifier,model_piecewise)
     for sym in predicted_symbols:
         print(f'{sym}', end=' ')
     print('\n')

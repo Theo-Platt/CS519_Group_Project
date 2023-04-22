@@ -21,13 +21,16 @@ CHARS_CLASSES_LOWER= ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o
 CHARS_CLASSES_UPPER = list(x.upper() for x in CHARS_CLASSES_LOWER)
 CHARS_CLASSES = CHARS_CLASSES_LOWER
 CHARS_CLASSES.extend(CHARS_CLASSES_UPPER) 
-# operators
-OPERATORS_CLASSES =['(', ')','+', '-', '=',',','×', '÷']
+#operators
+OPERATORS_CLASSES =['(', ')','+', '-', '=',',','times', 'divide']
 OPERATORS_CLASSES_COMPLEX=[]
 # all
 FULL_CLASSES = NUMS_CLASSES
 FULL_CLASSES.extend(CHARS_CLASSES)
 FULL_CLASSES.extend(OPERATORS_CLASSES)
+
+# piecewise
+PIECEWISE_CLASSES = ['1','2','3','4']
 
 
 # picture settings
