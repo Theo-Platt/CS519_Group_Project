@@ -1,11 +1,14 @@
-from train_codes import single_gen, single_symbol_recognizer
+from train_codes import single_gen, single_symbol_recognizer, piecewise_gen
+
 from eval_codes  import evaluate
 import argparse
 
 selection = {
-    "generate": single_gen.main,
-    "train":    single_symbol_recognizer.main,
-    "evaluate": evaluate.main,
+    "generate_symbols":   single_gen.main,
+    "generate_piecewise": piecewise_gen.main,
+    "train":              single_symbol_recognizer.main,
+    "evaluate":           evaluate.main,
+
     }
 
 if __name__ == "__main__":
@@ -17,7 +20,10 @@ if __name__ == "__main__":
 
     parser.add_argument(
         "option", 
-        choices=['generate','train','evaluate'], 
+
+
+        choices=['generate_symbols','generate_piecewise','train','evaluate'], 
+
         type=str, 
         help="Decide whether dataset is generated, models are trained/saved, or models are evaluated."
         )

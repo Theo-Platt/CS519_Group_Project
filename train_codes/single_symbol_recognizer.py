@@ -20,7 +20,7 @@ import pickle
 import cv2
 from func_codes.split import segmentize_recursive, show_recursive
 
-from train_codes.cnn_models import CNNClassifier1, CNNClassifierInter
+from train_codes.cnn_models import CNNClassifier1, CNNClassifierInter,CNNClassifierPiecewise
 
 
 # use this library to generate path that will work in both windows and linux
@@ -77,10 +77,20 @@ def save_pipeline(pipe, class_name, X_test):
             
 #https://kapernikov.com/tutorial-image-classification-with-scikit-learn/
 def main():
-    classes = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (OPERATORS_CLASSES,'OPERATORS')]
+    classes  = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (OPERATORS_CLASSES,'OPERATORS')]
+    pw_class =  (PIECEWISE_CLASSES,'PIECEWISE')
     labels = []
     X_intra = []
     y_intra = []
+    # Which classes to train
+    doSC=False #single classes (NUMBERS, CHARACTERS, OPERATORS)
+    doIC=False #intra class
+    doPW=False #piecewise class
+    if input("Train single classes?  (y/n): ") == 'y': doSC=True
+    if input("Train intraclass?      (y/n): ") == 'y': doIC=True
+    if input("Train piecewise class? (y/n): ") == 'y': doPW=True
+    
+
     for CLASSES in classes:
         dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES[0])
 
@@ -90,23 +100,62 @@ def main():
             X_intra.append(element)
             y_intra.append(CLASSES[1])
 
-        # print(np.array(CLASSES[0]).shape)
-        # print(CLASSES[0])
-        print(f"Training dataset: {CLASSES[1]}")
-        # print(y)
-        # print(np.unique(y))
+        ####################
+        ### single class ###
+        ####################
+        if doSC:
+            # print(np.array(CLASSES[0]).shape)
+            # print(CLASSES[0])
+            print(f"Training dataset: {CLASSES[1]}")
+            # print(y)
+            # print(np.unique(y))
+
+            # train test split
+            X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
+
+            # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
+            # create the model
+            model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
+            # model = Perceptron()
+            
+            # train
+            pipe = create_pipeline(model)
+            # pipe = CNNClassifier1()
+            pipe.fit(X_train, y_train)
+
+            # test the data
+            y_pred_train = pipe.predict(X_train)
+            y_pred_test  = pipe.predict(X_test)
+            print("This model has the following accuracy scores:")
+            print('  Training percentage: ', 100 *accuracy_score(y_train, y_pred_train),'%')
+            print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
+
+            # save pipeline
+            save_pipeline(pipe, CLASSES[1], X_test)
+
+
+    ##################
+    ### intraclass ###
+    ##################
+    if doIC:
+        X = np.array(X_intra)
+        y = np.array(y_intra)
+
+        # print('\n\ny_intra: ',y_intra)
+
+        print(f"Training intraclass:")
 
         # train test split
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
 
         # https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
         # create the model
         model = LogisticRegression(C=10, solver='lbfgs', max_iter=10000, multi_class="ovr")
         # model = Perceptron()
         print(np.unique(y))
+
         # train
-        pipe = create_pipeline(model)
-        # pipe = CNNClassifier1()
+        pipe = CNNClassifierInter(epochs=50, labels=labels)
         pipe.fit(X_train, y_train)
 
         # test the data
@@ -117,29 +166,38 @@ def main():
         print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
 
         # save pipeline
-        save_pipeline(pipe, CLASSES[1], X_test)
+        save_pipeline(pipe, "CLASSIFIER", X_test)
 
-    X = np.array(X_intra)
-    y = np.array(y_intra)
+    #################
+    ### piecewise ###
+    #################
+    if doPW:
+        dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, pw_class[0])
 
-    # print('\n\ny_intra: ',y_intra)
+        labels.append(pw_class[1])
+        # add these data for the intra classes classifier
+        for element in X:
+            X_intra.append(element)
+            y_intra.append(CLASSES[1])
 
-    print(f"Training intraclass:")
+        X = np.array(X_intra)
+        y = np.array(y_intra)
+        # print('\n\ny_intra: ',y_intra)
+        print(f"Training piecwise class:")
 
-    # train test split
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
+        # train test split
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
 
-    # train
-    pipe = CNNClassifierInter(epochs=50, labels=labels)
-    pipe.fit(X_train, y_train)
+        # train
+        pipe = CNNClassifierPiecewise(epochs=20, labels=labels)
+        pipe.fit(X_train, y_train)
 
-    # test the data
-    y_pred_train = pipe.predict(X_train)
-    y_pred_test  = pipe.predict(X_test)
-    print("This model has the following accuracy scores:")
-    print('  Training percentage: ', 100 *accuracy_score(y_train, y_pred_train),'%')
-    print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
+        # test the data
+        y_pred_train = pipe.predict(X_train)
+        y_pred_test  = pipe.predict(X_test)
+        print("This model has the following accuracy scores:")
+        print('  Training percentage: ', 100 *accuracy_score(y_train, y_pred_train),'%')
+        print('  Testing percentage:  ', 100 *accuracy_score(y_test, y_pred_test),'%')
 
-    # save pipeline
-    save_pipeline(pipe, "CLASSIFIER", X_test)
-
+        # save pipeline
+        save_pipeline(pipe, "PIECEWISE", X_test)

@@ -6,8 +6,9 @@ DATA_FOLDER = Path("./data/")
 NUM_PATH = DATA_FOLDER / "nums"
 CHAR_PATH = DATA_FOLDER / "chars" 
 OP_PATH = DATA_FOLDER / "operators" 
-COMMA_PATH = DATA_FOLDER / "comma"
+PIECWISE_PATH = DATA_FOLDER / "piecwise"
 SINGLE_GEN_CSV_PATH= DATA_FOLDER / "symbol_dataset.csv"
+PIECEWISE_GEN_CSV_PATH= DATA_FOLDER / "symbol_dataset.csv"
 MODEL_FOLDER = Path("./trained_models/")
 
 ############
@@ -23,6 +24,13 @@ CHARS_CLASSES.extend(CHARS_CLASSES_UPPER)
 #operators
 OPERATORS_CLASSES =['(', ')','+', '-', '=',',','times', 'divide']
 OPERATORS_CLASSES_COMPLEX=[]
+# all
+FULL_CLASSES = NUMS_CLASSES
+FULL_CLASSES.extend(CHARS_CLASSES)
+FULL_CLASSES.extend(OPERATORS_CLASSES)
+
+# piecewise
+PIECEWISE_CLASSES = ['1','2','3','4']
 
 
 # picture settings
@@ -66,5 +74,9 @@ TEST_3 = ("3 + 4 - 5 X a 5 + a x B",      # actual symbols in image
           [1,2,1,2,1,3,3,1,2,3,3,3],      # correct model to classify symbols by
           Path('./eval_codes/test3.png')) # path to test3.png image
 
-TEST_INPUT = TEST_2
+TEST_4 = ("T H I S I S A T E S T 4 2 6 4 1 2 8 + -", # actual symbols in image 
+          [3,3,3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,2,2], # correct model to classify symbols by
+          Path('./eval_codes/test4.png'))            # path to test4.png image
+
+TEST_INPUT = TEST_4
 TEST_IMAGE = TEST_INPUT[2]
