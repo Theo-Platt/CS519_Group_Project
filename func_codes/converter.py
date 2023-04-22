@@ -60,10 +60,10 @@ class Converter:
             if src_img is None:
                 return ""  
             
-            cv2.imshow(f'src_image', src_img)
-            cv2.setWindowProperty('src_image', cv2.WINDOW_AUTOSIZE, 1)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows()  
+            # cv2.imshow(f'src_image', src_img)
+            # cv2.setWindowProperty('src_image', cv2.WINDOW_AUTOSIZE, 1)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()  
             #predict it
             
             result = self.predict(src_img)
