@@ -138,7 +138,7 @@ def segmentize_recur(img, old_img=np.array([[]])):
     return (img, sub_imges_map)
 
 
-def segmentize_col_nocolor(img):
+def segmentize_col_nocolor(img, index):
     # the rgb of white is (255, 255, 255)
     gray_img = img#cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img_row = len(gray_img)
@@ -169,29 +169,25 @@ def segmentize_col_nocolor(img):
     # add add the result
     final_result = np.array([None for i in range(len(cols))])
 
-    for j in range(len(cols)-1):
-        row_s = 0
-        row_e = img_row
-        col_s = cols[j]
-        col_e = cols[j+1]
-        
-        # crop
-        img =  gray_img[row_s:row_e, col_s:col_e]
+    row_s = 0
+    row_e = img_row
+    col_s = cols[index+1]
+    col_e = img_col
+    
+    # crop
+    img =  gray_img[row_s:row_e, col_s:col_e]
 
-        # empty
-        shape = get_shape(img)
-        if shape[0] == 0 or shape[1] == 0:
-            continue
-        if img_empty(img):
-            continue
+    # empty
+    shape = get_shape(img)
+    if shape[0] == 0 or shape[1] == 0:
+        return None
+    if img_empty(img):
+        return None
 
-        # add padding
-        img = add_padding(img)
+    # add padding
+    img = add_padding(img)
 
-        # add to final result
-        final_result[j] = img
-
-    return final_result
+    return img
 
 # segmentize by row
 def segmentize_row(img):

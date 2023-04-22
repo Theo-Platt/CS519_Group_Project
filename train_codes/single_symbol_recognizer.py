@@ -96,6 +96,7 @@ def main():
     for CLASSES in classes:
         dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, CLASSES[0])
 
+        print(np.unique(y))
         labels.append(CLASSES[1])
         # add these data for the intra classes classifier
         for element in X:

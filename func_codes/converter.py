@@ -1,5 +1,5 @@
 # import segmentation library
-from func_codes.split import segmentize_recursive, segmentize_row
+from func_codes.split import segmentize_recursive, segmentize_col_nocolor, segmentize_recursive_nocolor
 # misc
 from misc import normalize_img, move_center, load_models, OPERATORS_DICT
 import cv2
@@ -15,7 +15,7 @@ class Converter:
     
     # convert an image to latex
     def convert_img_to_latex(self, img):
-        segmentize_row(img)
+
         # segmentize the image
         imgs = segmentize_recursive(img)
         latex_maps = self.convert(imgs)
@@ -48,7 +48,7 @@ class Converter:
             
             return False
             
-      
+
         #only does this on leaf
         result = ""
         if len(imgs_map) <= 1:
@@ -75,6 +75,8 @@ class Converter:
 
             return result
 
+        curly = None
+        non_curly = None
         for i in range(len(imgs_map)):
             imgs_row = imgs_map[i]
             empty_row = True
@@ -86,11 +88,28 @@ class Converter:
                 elif top:
                     result += " "    
                 imgs_row[j] = self.convert(sub_img_bundle, top=False)
+                if imgs_row[j] == "{":
+                    curly = j
+                elif imgs_row[j] != "":
+                    non_curly = j
                 result += imgs_row[j]
                 
             if top and not empty_row:
                 result += "\n"
         
+        
+        if (not curly is None) and (not non_curly is None):
+            curly_img = segmentize_col_nocolor(src_img, curly)
+
+            if not curly_img is None:
+                cv2.imshow(f'src_image', curly_img)
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()  
+
+                result = "curly (\n" 
+                imgs = segmentize_recursive_nocolor(curly_img)
+                result += self.convert(imgs)
+                result += "\n)"
         # needs updates
         # special case for equal.
         if len(imgs_map) == 5 and len(imgs_map[0]) == 3:
