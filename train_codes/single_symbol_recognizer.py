@@ -172,7 +172,7 @@ def main():
     ### piecewise ###
     #################
     if doPW:
-        dataset, X, y = parse_data(SINGLE_GEN_CSV_PATH, pw_class[0])
+        dataset, X, y = parse_data(PIECEWISE_GEN_CSV_PATH, pw_class[0])
 
         labels.append(pw_class[1])
         # add these data for the intra classes classifier

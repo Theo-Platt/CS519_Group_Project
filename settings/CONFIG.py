@@ -8,7 +8,7 @@ CHAR_PATH = DATA_FOLDER / "chars"
 OP_PATH = DATA_FOLDER / "operators" 
 PIECWISE_PATH = DATA_FOLDER / "piecwise"
 SINGLE_GEN_CSV_PATH= DATA_FOLDER / "symbol_dataset.csv"
-PIECEWISE_GEN_CSV_PATH= DATA_FOLDER / "symbol_dataset.csv"
+PIECEWISE_GEN_CSV_PATH= DATA_FOLDER / "piecewise_dataset.csv"
 MODEL_FOLDER = Path("./trained_models/")
 
 ############
