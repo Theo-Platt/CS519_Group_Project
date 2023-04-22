@@ -11,6 +11,7 @@ class Converter:
         self.i = 0
         self.models = load_models()
         self.model_classifier = load_models(specific="classifier")
+        self.model_piecewise  = load_models(specific="piecewise")
     
     # convert an image to latex
     def convert_img_to_latex(self, img):
@@ -67,8 +68,9 @@ class Converter:
             
             result = self.predict(src_img)
             #print("predicted to be", result)
-            if result == "times":
-                return "×"
+            if result == "times" or result == "curly_bracket":
+                return OPERATORS_DICT[result]
+                return OPERATORS_DICT[result]
 
             return result
 
