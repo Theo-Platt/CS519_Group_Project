@@ -10,7 +10,7 @@ class Converter:
         self.pipeline = None
         self.i = 0
         self.models = load_models()
-        self.model_classifier = load_models(classifier=True)
+        self.model_classifier = load_models(specific='classifier')
         
     
     # convert an image to latex
