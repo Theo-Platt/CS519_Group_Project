@@ -1,5 +1,5 @@
 # CS519_Group_Project
-CS-519-M01; Dr. Huiping Cao
+Semester long group project for CS-519-M01, taught by Dr. Huiping Cao in Spring 2023.
 ## Authors 
 - Long Tran <br/>
 - Theoderic Platt <br/>
