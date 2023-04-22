@@ -68,9 +68,10 @@ class Converter:
             
             result = self.predict(src_img)
             #print("predicted to be", result)
-            if result == "times" or result == "curly_bracket":
+            if result == "times" :
                 return OPERATORS_DICT[result]
-                return OPERATORS_DICT[result]
+            if result == "curly_bracket":
+                return '{'
 
             return result
 
