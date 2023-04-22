@@ -1,7 +1,7 @@
 # import segmentation library
 from func_codes.split import segmentize_recursive, segmentize_row
 # misc
-from misc import normalize_img, move_center, load_models
+from misc import normalize_img, move_center, load_models, OPERATORS_DICT
 import cv2
 import numpy as np
 
