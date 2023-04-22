@@ -129,7 +129,7 @@ def black_or_white_transformer(img):
 
 def img_empty(img):
     for x in np.nditer(img):
-        if x != 255:
+        if (255 - x) > 2:
             return False
     
     return True

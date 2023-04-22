@@ -6,6 +6,7 @@ from __future__ import division
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+import math
 
 from misc import add_padding, black_or_white_transformer, get_shape, img_empty
 
@@ -37,7 +38,7 @@ def get_vertical_hist(img, row):
     return vertical_hist
 
 def segmentize(img):
-     # the rgb of white is (255, 255, 255)
+    # the rgb of white is (255, 255, 255)
     gray_img = img#cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img_row = len(gray_img)
     img_col =  len(gray_img[0])
@@ -54,13 +55,13 @@ def segmentize(img):
     cols = []
     space_found = False
     for i in range(len(horizontal_hist)):
-        value = horizontal_hist[i][0]
+        value = round(horizontal_hist[i][0], 0)
 
         if space_found and value > 0 and i > 0:
             #cv2.line(src, (0, i-1), (img_col, i-1), (255, 0, 0))
             rows.append(i-1)
             space_found = False
-        elif value == 0:
+        elif value <= 0:
             if not space_found:
                 #cv2.line(src, (0, i), (img_col, i), (255, 0, 0))
                 rows.append(i)
@@ -71,12 +72,12 @@ def segmentize(img):
 
     space_found = False
     for i in range(len(vertical_hist[0])):
-        value = vertical_hist[0][i]
+        value = round(vertical_hist[0][i],)
         if space_found and value > 0 and i > 0:
             #cv2.line(src, (i-1, 0), (i-1, img_row), (255, 0, 0))
             cols.append(i-1)
             space_found = False
-        elif value == 0:
+        elif value <= 0:
             if not space_found:
                 #cv2.line(src, (i, 0), (i, img_row), (255, 0, 0))
                 cols.append(i)
@@ -135,6 +136,67 @@ def segmentize_recur(img, old_img=np.array([[]])):
             sub_imges_map[i][j] = sub_img_map
     
     return (img, sub_imges_map)
+
+
+def segmentize_row(img):
+    gray_img = img#cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img_row = len(gray_img)
+    img_col =  len(gray_img[0])
+
+    
+    # vertical hist
+    horizontal_hist = get_horizontal_hist(gray_img, img_col)
+
+    # vertical_hsit
+    vertical_hist = get_vertical_hist(gray_img, img_row)
+
+    # get the boundary
+    rows = []
+    space_found = False
+    for i in range(len(horizontal_hist)):
+        value = round(horizontal_hist[i][0], 0)
+
+        if space_found and value > 0 and i > 0:
+            #cv2.line(src, (0, i-1), (img_col, i-1), (255, 0, 0))
+            rows.append(i-1)
+            space_found = False
+        elif value <= 0:
+            if not space_found:
+                #cv2.line(src, (0, i), (img_col, i), (255, 0, 0))
+                rows.append(i)
+            space_found = True
+            
+        
+        prev = value
+
+    # crop the images. 
+    # check for empty
+    # padding
+    # add add the result
+    final_result = np.array([ None for j in range(len(rows))])
+    for i in range(len(rows)-1):
+        row_s = rows[i]
+        row_e = rows[i+1]
+        col_s = 0
+        col_e = img_col
+        
+        # crop
+        img =  gray_img[row_s:row_e, col_s:col_e]
+
+        # empty
+        shape = get_shape(img)
+        if shape[0] == 0 or shape[1] == 0:
+            continue
+        if img_empty(img):
+            continue
+
+        # add padding
+        img = add_padding(img)
+
+        # add to final result
+        final_result[i] = img
+
+    return final_result
 
 def show_recursive(imgs_bundle):
     if imgs_bundle is None:

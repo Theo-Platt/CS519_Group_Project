@@ -1,5 +1,5 @@
 # import segmentation library
-from func_codes.split import segmentize_recursive, segmentize_recursive_nocolor
+from func_codes.split import segmentize_recursive, segmentize_row
 # misc
 from misc import normalize_img, move_center, load_models
 import cv2
@@ -15,6 +15,7 @@ class Converter:
     
     # convert an image to latex
     def convert_img_to_latex(self, img):
+        segmentize_row(img)
         # segmentize the image
         imgs = segmentize_recursive(img)
         latex_maps = self.convert(imgs)
@@ -31,35 +32,47 @@ class Converter:
         # it sub images 
         imgs_map = imgs_bundle[1]
 
-        # only does this on leaf
+        #special function for leaf node
+        # if the image has more white pixels than a certain number of pixels, don't predict it
+        def majority_empty(img):
+            sum = 0
+            pixels = 0
+            tmp = np.nditer(img)
+            for x in tmp:
+                pixels += 1
+                if x == 255:
+                   sum += 1
+
+            if (sum / pixels) > 0.95:
+                return True
+            
+            return False
+            
+      
+        #only does this on leaf
         result = ""
-        if len(imgs_map) <= 1:       
-            # print(src_img.shape)
-            # imgs = segmentize_recursive_nocolor(src_img)
-            # print(len(imgs[1]), len(imgs[1][0]))
-            # cv2.imshow(f'src_image', src_img)
-            # print(src_img.shape)
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
+        if len(imgs_map) <= 1:
+            if majority_empty(src_img):
+                return ""  
+            
             #resize image
-            src_img = normalize_img(src_img)  
+            src_img = normalize_img(src_img)   
             if src_img is None:
                 return ""  
-            # predict it
+            
+            cv2.imshow(f'src_image', src_img)
+            cv2.setWindowProperty('src_image', cv2.WINDOW_AUTOSIZE, 1)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()  
+            #predict it
+            
             result = self.predict(src_img)
             #print("predicted to be", result)
             if result == "times":
                 return "×"
-            # cv2.imshow(f'src_image', src_img)
-            # cv2.waitKey(0)
-            # cv2.destroyAllWindows()
 
             return result
-        
 
-        # manage each individula subnodes. 
-        #print("size: ", len(imgs_map), len(imgs_map[0]))
-     
         for i in range(len(imgs_map)):
             imgs_row = imgs_map[i]
             empty_row = True
@@ -92,9 +105,6 @@ class Converter:
             if imgs_map[1][1] != None and imgs_map[3][1] == "-" and imgs_map[5][1] != None:
                  # resize image
                 src_img = normalize_img(src_img)
-
-                
-
                 temp = self.predict(src_img)
                 
                 if temp == "divide":
