@@ -1,7 +1,9 @@
 # CS519_Group_Project
-Long Tran <br/>
-Theoderic Platt <br/>
 CS-519-M01; Dr. Huiping Cao
+## Authors 
+- Long Tran <br/>
+- Theoderic Platt <br/>
+
 
 # Prerequisites:
 - pip 23.0.1       -- only if dependencies are not yet installed.
@@ -9,6 +11,7 @@ CS-519-M01; Dr. Huiping Cao
 - requirements.txt -- all dependencies
 
 # Running the code
+The codebase is run through two primary python scripts, both of which need additional parameters to be properly utilized.
 ## main
 The main program runs our models against an inputted .png image containing a mathematical formula. The output of main is what our models identified as the text contained within the image file. To run main, do the following:
 - 'python main -p <img>'
