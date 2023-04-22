@@ -102,9 +102,9 @@ class Converter:
             curly_img = segmentize_col_nocolor(src_img, curly)
 
             if not curly_img is None:
-                cv2.imshow(f'src_image', curly_img)
-                cv2.waitKey(0)
-                cv2.destroyAllWindows()  
+                # cv2.imshow(f'src_image', curly_img)
+                # cv2.waitKey(0)
+                # cv2.destroyAllWindows()  
 
                 result = "curly (\n" 
                 imgs = segmentize_recursive_nocolor(curly_img)
