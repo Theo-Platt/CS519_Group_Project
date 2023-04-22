@@ -110,7 +110,7 @@ def main():
             # print(CLASSES[0])
             print(f"Training dataset: {CLASSES[1]}")
             # print(y)
-            # print(np.unique(y))
+            print(np.unique(y))
 
             # train test split
             X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, stratify=y)

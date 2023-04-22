@@ -99,9 +99,15 @@ def main():
             # operators
             op_name = ''
             for op in OPERATORS_CLASSES:
-                if op == '×': op_name = 'times'
-                if op == '÷': op_name = 'divide'
-                if op == '\{': op_name = 'curly_bracket'
+                if op == 'times': 
+                    op_name = 'times'
+                    op = OPERATORS_DICT[op]
+                if op == 'divide': 
+                    op_name = 'divide'
+                    op = OPERATORS_DICT[op]
+                if op == 'curly_bracket': 
+                    op_name = 'curly_bracket'
+                    op = OPERATORS_DICT[op]
                 if op_name == '': folder_path = OP_PATH / f'op_{op}_folder'
                 else: folder_path = OP_PATH / f'op_{op_name}_folder'
                 if not os.path.exists(str(folder_path)):
