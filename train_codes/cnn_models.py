@@ -227,7 +227,7 @@ class CNNClassifierInter:
 
 
 class CNNClassifierPiecewise:
-    def __init__(self, epochs=2, img_size=(100, 100), batch_size=64, labels=None):
+    def __init__(self, epochs=2, img_size=(100, 100), batch_size=100, labels=None):
         self.labels = {}
         self.nums = {}
         for i in range(len(labels)):
