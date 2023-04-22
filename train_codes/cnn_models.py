@@ -237,13 +237,13 @@ class CNNClassifierPiecewise:
         model = Sequential()
         model.add_module('conv1', Conv2d(in_channels=1, out_channels=32,kernel_size=2, padding=2))
         model.add_module('relu1', ReLU())
-        model.add_module('pool1', MaxPool2d(kernel_size=1))
+        model.add_module('pool1', MaxPool2d(kernel_size=2))
         model.add_module('conv2', Conv2d(in_channels=32, out_channels=64,kernel_size=2, padding=2))
         model.add_module('relu2', ReLU())
-        model.add_module('pool2', MaxPool2d(kernel_size=1))
+        model.add_module('pool2', MaxPool2d(kernel_size=2))
         model.add_module('conv3', Conv2d(in_channels=64, out_channels=128,kernel_size=2, padding=2))
         model.add_module('relu3', ReLU())
-        model.add_module('pool3', MaxPool2d(kernel_size=1))
+        model.add_module('pool3', MaxPool2d(kernel_size=2))
         
 
         model.add_module('flatten', Flatten())
