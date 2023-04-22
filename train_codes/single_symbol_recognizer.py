@@ -82,6 +82,8 @@ def main():
     labels = []
     X_intra = []
     y_intra = []
+    X_pw=[]
+    y_pw=[]
     # Which classes to train
     doSC=False #single classes (NUMBERS, CHARACTERS, OPERATORS)
     doIC=False #intra class
