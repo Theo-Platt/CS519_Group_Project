@@ -1,14 +1,15 @@
 # CS519_Group_Project
 Semester long group project for CS-519-M01, taught by Dr. Huiping Cao in Spring 2023.
-## Authors 
+
+# Authors 
 - Long Tran <br/>
 - Theoderic Platt <br/>
 
-
 # Prerequisites:
-- pip 23.0.1       -- only if dependencies are not yet installed.
-- Python 3.10.10   -- all testing was conducted on this version of python.
-- requirements.txt -- all dependencies
+- _pip 23.0.1_       -- only if dependencies are not yet installed.
+- _Python 3.10.10_   -- all testing was conducted on this version of python.
+- _requirements.txt_ -- this file contains all dependencies, packages, and libraries needed.
+  - To install the requirements: 'pip install -r requirements.txt'
 
 # Running the code
 The codebase is run through two primary python scripts, both of which need additional parameters to be properly utilized.
@@ -39,3 +40,51 @@ For all model generation, if an existing model exists, you will be given the opt
 Evaluating the models simply runs the model on a hardcoded pre-made test case and provides metrics for how accurately the intraClass model performs, how well the single class models perform, and how well these models perform together. To run model evaluation: <br/>
 - 'python tools.py evaluate'
 
+# Dataset Descriptions
+The datasets used are contained within **./data**. The data is distributed between characters, numbers, operators, and piecewise data. The descriptions for these datasets are assuming the data has not been overwritten by the user after downloading this repository. If the data has been regenerated, the exact specifications may vary.
+## Numbers Dataset
+The classes for this dataset are [0,1,2,3,4,5,6,7,8,9] <br/>
+This dataset is made up of 100 instances for each class. Each instance is a grayscale 100x100 pixel .png containing an image of the number corresponding to the class label. The instances have random fonts, and are all fit to fill the image.
+## Characters Dataset
+The classes for this dataset are [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z] <br/>
+This dataset is made up of 100 instances for each class. Each instance is a grayscale 100x100 pixel .png containing an image of the character corresponding to the class label. The instances have random fonts, and are all fit to fill the image.
+## Operators Dataset
+The classes for this dataset are [(,),+,-,=,',',divide,times,curly_bracket] <br/>
+This dataset is made up of 100 instances for each class. Each instance is a grayscale 100x100 pixel .png containing an image of the operator corresponding to the class label. For the class label _divide_, the standard division symbol is used. For the class _times_, the multiplication symbol is used. For the class _curly_brace_, the curly brace is used. The instances have random fonts, and are all fit to fill the image.
+## Piecewise Dataset
+The classes for this dataset are [1,2,3,4] <br/>
+This dataset is made up of 2000 instances for each class. Each instance is a grayscale 100x100 pixel .png containing an image of a piecewise function with _class_ number of cases. A class 1 is a curly brace followed by one line-height of output. A class 2 is a curly brace followed by two line-height of output, and so on. The instances have random fonts and, are all fit to fill the image.<br/>
+Note: It was decided very late in development that this dataset is no longer needed. The data is present still for legacy sake.
+
+
+# Codebase Organization
+The following is the entire codebase description. 
+## ./data
+The data directory contains the datasets outlined above in this readme. Folders containing the datasets are present, along with two .csv files which serve as data-key pair information storage.
+## ./eval_codes
+The eval_codes directory contains various test images for evaluating the accuracy of the models. Additionally, eval codes contains two python scripts.
+- _evaluate.py_ -- evaluates the models on a test image and outputs evaluation metrics. This script is called as a part of the tools.py script
+- _predict.py_  -- Performs the same action as evaluate.py, but does not print out evaluation metrics. This script is depricated.
+## ./func_codes
+The func_codes directory contains two python scripts.
+- _converter.py_ -- Predicts the contents of a supplied image and converts them to latex. This script is called as a part of the main.py script.
+- _split.py_ -- contains all code for segmentizing an input image to split all individual characters apart for model prediction.
+## ./settings
+The settings directory simply contains a single CONFIG.py file which holds all paths, data references, evaluation cases, the list of fonts and model paths.
+## ./train_codes
+The train_codes directory contains a set of python scripts used for either generation of the datasets or training of the models.
+- _cnn_models.py_ -- Code for training the CNN models for both intraClass and piecewise class.
+- _piecewise_gen.py_ -- Code for generating piecewise dataset.
+- _save_tools.py_ -- header file for pickle saving data and models
+- _single_gen.py_ -- Code for generating the single datasets (numbers, characters, and operators)
+- _single_symbol_recognizer.py_ -- Code for training the models for all datasets
+- _transformer.py_ -- Code for transforming and preprocessing image segments gained by split.py into similar formatting to the datasets we have trained models on.
+## ./trained_models
+The trained_models directory contains the .bin files which have been saved using pickle for the models described above. Some models may not be present upon initially pulling the repository due to file size limitations of github. If models are not present (fail to load), please generate and save the missing models locally.
+## Loose files
+The remaining files are those not contained within subdirectories. These files are either images for testing, the requirements documents, or a set of several python scripts. These scripts are:
+- _main.py_ -- The main file for running the code. Details on how to run are outlined above in this readme.
+- _tools.py_ -- The tools file for running the code. Details on how to run are outlined above in this readme.
+- _misc.py_ -- Code containing a collection of useful miscellaneous functions used heavily throughout the codebase.
+- _piecewise_generator.py_ -- depricated code which has now been moved into other files
+- _dataset_prediction.py_ -- depricated code which has now been moved into other files
