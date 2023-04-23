@@ -215,6 +215,7 @@ def segmentize_col_nocolor(img, index):
 # not used
 def segmentize_row(img):
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    img = add_padding(img)
     gray_img = img#cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     img_row = len(gray_img)
     img_col =  len(gray_img[0])
