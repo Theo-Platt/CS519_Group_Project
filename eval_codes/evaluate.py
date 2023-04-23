@@ -80,7 +80,13 @@ def main():
 
     #make predictions
     imgs = segmentize_recursive(src)
+    start = tm.time()
     guess_recursive(imgs, models,model_classifier)
+    end   = tm.time()
+    training_time=(end-start)
+    print(f"total time to train the model: {training_time} seconds")
+            
+    
     
     #accuracy of model prediction
     print("\nModel Selection accuracy")

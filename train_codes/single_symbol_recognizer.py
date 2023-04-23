@@ -16,6 +16,7 @@ from sklearn.tree import DecisionTreeClassifier
 from settings import CONFIG
 from os.path import join
 import pickle
+import time as tm
 
 import cv2
 from func_codes.split import segmentize_recursive, show_recursive
@@ -131,7 +132,12 @@ def main():
             # train
             pipe = create_pipeline(model)
             # pipe = CNNClassifier1()
+            start = tm.time()
             pipe.fit(X_train, y_train)
+            end   = tm.time()
+            training_time=(end-start)
+            print(f"total time to train the model: {training_time} seconds")
+            
 
             # test the data
             y_pred_train = pipe.predict(X_train)
@@ -166,7 +172,11 @@ def main():
 
         # train
         pipe = CNNClassifierInter(epochs=50, labels=labels)
+        start = tm.time()
         pipe.fit(X_train, y_train)
+        end   = tm.time()
+        training_time=(end-start)
+        print(f"total time to train the model: {training_time} seconds"))
 
         # test the data
         y_pred_train = pipe.predict(X_train)
@@ -200,7 +210,12 @@ def main():
 
         # train
         pipe = CNNClassifierPiecewise(epochs=20, labels=labels)
+        start = tm.time()
         pipe.fit(X_train, y_train)
+        end   = tm.time()
+        training_time=(end-start)
+        print(f"total time to train the model: {training_time} seconds")
+            
 
         # test the data
         y_pred_train = pipe.predict(X_train)
