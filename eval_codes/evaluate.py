@@ -17,7 +17,7 @@ model_evaluator = {
     "CHARACTERS":3,
 }
 
-def guess_recursive(imgs_bundle, models, model_classifier,model_piecewise):
+def guess_recursive(imgs_bundle, models, model_classifier):
     if imgs_bundle is None:
         return
     
@@ -27,27 +27,30 @@ def guess_recursive(imgs_bundle, models, model_classifier,model_piecewise):
     x = src_img.shape[0]
     y = src_img.shape[1]
     if len(imgs_map) == 1 and x <= 100 and y <= 100:
-        src_img = move_center(src_img)
-        src_img = normalize_img(src_img)
+        try:
+            src_img = move_center(src_img)
+            src_img = normalize_img(src_img)
 
-        # add predicted model to solution
-        selected_model = model_classifier.predict(np.array([src_img]))
-        pred  = models[selected_model[0]].predict(np.array([src_img]))
+            # add predicted model to solution
+            selected_model = model_classifier.predict(np.array([src_img]))
+            pred  = models[selected_model[0]].predict(np.array([src_img]))
 
-        selected = selected_model[0]
-        selected = model_evaluator[selected]
-        predicted_models.append(selected)
-        predicted_symbols.extend(pred)
+            selected = selected_model[0]
+            selected = model_evaluator[selected]
+            predicted_models.append(selected)
+            predicted_symbols.extend(pred)
 
-        # cv2.imshow(f'src_image', src_img)
-        # cv2.waitKey(0)
-        # cv2.destroyAllWindows() 
+            cv2.imshow(f'src_image', src_img)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows() 
+        except:
+            pass
     
     for i in range(len(imgs_map)):
         imgs_row = imgs_map[i]
         for j in range(len(imgs_row)):
             sub_img_bundle = imgs_row[j]
-            guess_recursive(sub_img_bundle, models, model_classifier,model_piecewise)
+            guess_recursive(sub_img_bundle, models, model_classifier)
 
     return predicted_models, predicted_symbols
 
@@ -77,7 +80,7 @@ def main():
 
     #make predictions
     imgs = segmentize_recursive(src)
-    guess_recursive(imgs, models,model_classifier,model_piecewise)
+    guess_recursive(imgs, models,model_classifier)
     
     #accuracy of model prediction
     print("\nModel Selection accuracy")
