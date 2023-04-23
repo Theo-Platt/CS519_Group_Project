@@ -88,16 +88,16 @@ def main():
     classes  = [(NUMS_CLASSES,'NUMBERS') , (CHARS_CLASSES,'CHARACTERS') , (OPERATORS_CLASSES,'OPERATORS')]
     pw_class =  (PIECEWISE_CLASSES,'PIECEWISE')
     labels = []
-    X_intra = []
-    y_intra = []
+    X_inter = []
+    y_inter = []
     X_pw=[]
     y_pw=[]
     # Which classes to train
     doSC=False #single classes (NUMBERS, CHARACTERS, OPERATORS)
-    doIC=False #intra class
+    doIC=False #inter class
     doPW=False #piecewise class
     if input("Train single classes?  (y/n): ") == 'y': doSC=True
-    if input("Train intraclass?      (y/n): ") == 'y': doIC=True
+    if input("Train interclass?      (y/n): ") == 'y': doIC=True
     if input("Train piecewise class? (y/n): ") == 'y': doPW=True
     
 
@@ -106,10 +106,10 @@ def main():
 
         print(np.unique(y))
         labels.append(CLASSES[1])
-        # add these data for the intra classes classifier
+        # add these data for the inter classes classifier
         for element in X:
-            X_intra.append(element)
-            y_intra.append(CLASSES[1])
+            X_inter.append(element)
+            y_inter.append(CLASSES[1])
 
         ####################
         ### single class ###
@@ -151,15 +151,15 @@ def main():
 
 
     ##################
-    ### intraclass ###
+    ### interclass ###
     ##################
     if doIC:
-        X = np.array(X_intra)
-        y = np.array(y_intra)
+        X = np.array(X_inter)
+        y = np.array(y_inter)
 
-        # print('\n\ny_intra: ',y_intra)
+        # print('\n\ny_inter: ',y_inter)
 
-        print(f"Training intraclass:")
+        print(f"Training interclass:")
 
         # train test split
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.4, stratify=y)
@@ -195,14 +195,14 @@ def main():
         dataset, X, y = parse_data(PIECEWISE_GEN_CSV_PATH, pw_class[0])
 
         labels.append(pw_class[1])
-        # add these data for the intra classes classifier
+        # add these data for the inter classes classifier
         for element in X:
             X_pw.append(element)
             y_pw.append(CLASSES[1])
 
         X = np.array(X_pw)
         y = np.array(y_pw)
-        # print('\n\ny_intra: ',y_intra)
+        # print('\n\ny_inter: ',y_inter)
         print(f"Training piecwise class:")
 
         # train test split
