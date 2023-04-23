@@ -1,3 +1,4 @@
+# codes containing transformer to be used with normal classification models
 from sklearn.base import BaseEstimator, TransformerMixin
 import numpy as np
 from skimage.feature import hog

@@ -29,6 +29,12 @@ from pathlib import Path
 
 from misc import parse_data
 
+# create a pipeline that will go through the following
+# hog transformer
+# standard scaler
+# PCA
+# and finally the classifier model of choice. 
+# The model should follow scikit-learn interface
 def create_pipeline(model):
     pipe = Pipeline(
     [
@@ -47,6 +53,7 @@ def create_pipeline(model):
 
     return pipe
 
+# save the pipeline 
 def save_pipeline(pipe, class_name, X_test):
     # allow data model overwrite?
     try:
