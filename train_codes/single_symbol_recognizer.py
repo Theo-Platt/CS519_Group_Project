@@ -176,7 +176,7 @@ def main():
         pipe.fit(X_train, y_train)
         end   = tm.time()
         training_time=(end-start)
-        print(f"total time to train the model: {training_time} seconds"))
+        print(f"total time to train the model: {training_time} seconds")
 
         # test the data
         y_pred_train = pipe.predict(X_train)
