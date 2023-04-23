@@ -3,7 +3,7 @@
 # Author: Long, Theo
 
 # import segmentation library
-from func_codes.split import segmentize_recursive, segmentize_col_nocolor, segmentize_recursive_nocolor
+from func_codes.split import segmentize_recursive, segmentize_col_nocolor, segmentize_recursive_nocolor, segmentize_row
 # misc
 from misc import normalize_img, move_center, load_models, OPERATORS_DICT
 import cv2
@@ -24,11 +24,17 @@ class Converter:
     
     # convert an entire image to its actual content
     def convert_img_to_latex(self, img):
-        # segmentize the image
-        imgs = segmentize_recursive(img)
-        # actual conversion
-        latex_maps = self.convert(imgs)
-        return latex_maps
+        row_imgs = segmentize_row(img)
+        result = ""
+        for rowimg in row_imgs: 
+            if rowimg is None:
+                continue
+            # segmentize the image
+            imgs = segmentize_recursive_nocolor(rowimg)
+            # actual conversion
+            result += self.convert(imgs)
+            result += "\n"
+        return result
 
     # convert an image bundle (gotten from the segmentize_recursive() function) to its actualy content.
     # top is to idnetify that we are at the top of the recursion
