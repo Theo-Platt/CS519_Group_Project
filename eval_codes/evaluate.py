@@ -40,9 +40,9 @@ def guess_recursive(imgs_bundle, models, model_classifier):
             predicted_models.append(selected)
             predicted_symbols.extend(pred)
 
-            cv2.imshow(f'src_image', src_img)
-            cv2.waitKey(0)
-            cv2.destroyAllWindows() 
+            # cv2.imshow(f'src_image', src_img)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows() 
         except:
             pass
     
