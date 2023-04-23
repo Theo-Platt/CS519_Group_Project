@@ -7,6 +7,7 @@ from func_codes.split import segmentize_recursive
 from settings import CONFIG
 from misc import normalize_img
 from misc import run_test_input_accuracy
+import time as tm
 
 
 predicted_symbols = []
