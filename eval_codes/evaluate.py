@@ -85,12 +85,12 @@ def main():
     guess_recursive(imgs, models,model_classifier)
     end   = tm.time()
     training_time=(end-start)
-    print(f"total time to train the model: {training_time} seconds")
+    print(f"\n\ntotal time to evaluate: {training_time} seconds")
             
     
     
     #accuracy of model prediction
-    print("\nModel Selection accuracy")
+    print("Model Selection accuracy")
     run_test_input_accuracy(CONFIG.TEST_INPUT[1],predicted_models)
     
     #accuracy of symbol prediction

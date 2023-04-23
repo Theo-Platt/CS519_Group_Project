@@ -83,5 +83,5 @@ TEST_4 = ("T H I S I S A T E S T 4 2 6 4 1 2 8 + -", # actual symbols in image
           [3,3,3,3,3,3,3,3,3,3,3,1,1,1,1,1,1,1,2,2], # correct model to classify symbols by
           Path('./eval_codes/test4.png'))            # path to test4.png image
 
-TEST_INPUT = TEST_4
+TEST_INPUT = TEST_3
 TEST_IMAGE = TEST_INPUT[2]
