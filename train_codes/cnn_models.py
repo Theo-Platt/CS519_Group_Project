@@ -1,3 +1,7 @@
+# The codes containing 3 CNN models.
+# General CNN (Not used)
+# Interclass CNN
+#  CNN Piecewise
 from torch.nn import Sequential, Conv2d, ReLU, MaxPool2d, Flatten, Linear, Dropout, CrossEntropyLoss
 from torch.optim import Adam
 from torch.utils.data import Dataset, DataLoader, TensorDataset
@@ -5,6 +9,9 @@ import torch
 
 import numpy as np
 
+# First attempt. 
+# It is broken
+# do not use this model
 class CNNClassifier1:
     def __init__(self, epochs=2, img_size=(100, 100), batch_size=64):
         model = Sequential()
@@ -89,7 +96,9 @@ class CNNClassifier1:
         X = torch.from_numpy(X)
         pred = self.model(X)
         return pred
-    
+
+
+# CNN Classifier for inter class classification
 class CNNClassifierInter:
     def __init__(self, epochs=2, img_size=(100, 100), batch_size=64, labels=None):
         self.labels = {}
@@ -225,7 +234,7 @@ class CNNClassifierInter:
         accuracy /= len(test_dl.dataset)
         return 
 
-
+# CNN Classifier for Piecewise classification
 class CNNClassifierPiecewise:
     def __init__(self, epochs=2, img_size=(100, 100), batch_size=64, labels=None):
         self.labels = {}

@@ -1,3 +1,5 @@
+# codes contain functions for saving and loading functions
+# 
 import pickle
 
 def save_pickle(path, model):
