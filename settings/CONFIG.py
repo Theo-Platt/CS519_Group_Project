@@ -75,8 +75,8 @@ TEST_2 = ("1 2 3 4 5 6 7 8 9 1 0 1 1 1 2 1 4", # actual symbols in image
           [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1], # correct model to classify symbols by
           Path('./eval_codes/test2.png'))      # path to test2.png image
 
-TEST_3 = ("3 + 4 - 5 X a 5 + a x B",      # actual symbols in image 
-          [1,2,1,2,1,3,3,1,2,3,3,3],      # correct model to classify symbols by
+TEST_3 = ("3 + 4 - 5 X a 5 + a x - B",      # actual symbols in image 
+          [1,2,1,2,1,3,3,1,2,3,3,2,3],      # correct model to classify symbols by
           Path('./eval_codes/test3.png')) # path to test3.png image
 
 TEST_4 = ("T H I S I S A T E S T 4 2 6 4 1 2 8 + -", # actual symbols in image 
