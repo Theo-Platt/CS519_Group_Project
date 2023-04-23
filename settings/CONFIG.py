@@ -67,8 +67,8 @@ OP_MODEL_PATH=Path("./model_parameters/op.sav")
 #      2: "OPERATORS"
 #      3: "CHARACTERS"
 #note: Test 1 does not work as the equals sign is read improperly by the image parser.
-TEST_1 = ("2 x - 3 = - 7",                # actual symbols in image 
-          [1,3,2,1,2,2,1],                # correct model to classify symbols by
+TEST_1 = ("2 x - 3 = - 7 1",                # actual symbols in image 
+          [1,3,2,1,2,2,1,1],                # correct model to classify symbols by
           Path('./eval_codes/test1.png')) # path to test1.png image
 
 TEST_2 = ("1 2 3 4 5 6 7 8 9 1 0 1 1 1 2 1 4", # actual symbols in image 
