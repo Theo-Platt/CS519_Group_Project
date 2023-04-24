@@ -11,7 +11,8 @@ Semester long group project for CS-519-M01, taught by Dr. Huiping Cao in Spring 
 - _Python 3.10.10_   -- all testing was conducted on this version of python.
 - _requirements.txt_ -- this file contains all dependencies, packages, and libraries needed.
   - To install the requirements: 'pip install -r requirements.txt'
-
+- _external_requirements.txt_ -- this file contains the names of the command-line programs that must be installed on the machine.
+  - To install, you can look for online instructions to install them. 
 # Running the code
 The codebase is run through two primary python scripts, both of which need additional parameters to be properly utilized.
 ## main
