@@ -17,7 +17,7 @@ Semester long group project for CS-519-M01, taught by Dr. Huiping Cao in Spring 
 The codebase is run through two primary python scripts, both of which need additional parameters to be properly utilized.
 ## main
 The main program runs our models against an inputted .png image containing a mathematical formula. The output of main is what our models identified as the text contained within the image file. To run main, do the following:
-- 'python main -p **img**'
+- 'python main.py -p **img**'
   - **img** should contain the path to the image file that you with to test. Some default images we have supplied for our testing are as follows:
     - 'python main.py -p input.png'
     - 'python main.py -p input2.png'
