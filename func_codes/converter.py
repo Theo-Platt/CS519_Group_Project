@@ -24,6 +24,7 @@ class Converter:
     
     # convert an entire image to its actual content
     def convert_img_to_latex(self, img):
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         row_imgs = segmentize_row(img)
         result = ""
         for rowimg in row_imgs: 
@@ -140,19 +141,31 @@ class Converter:
         # checking if we are seeing a piecewise. 
         # if there is a curly bracket in this image, and there are also other stuffs. Then, it must be a piecewise. 
         if (not curly is None) and (not non_curly is None):
+            # cv2.imshow(f'src_image', src_img)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()  
+
             # get the sub-image that is to the right of the curly bracket
             curly_img = segmentize_col_nocolor(src_img, curly)
 
             # if the image found is not None
             # predict it
             if not curly_img is None:
-                # cv2.imshow(f'src_image', curly_img)
-                # cv2.waitKey(0)
-                # cv2.destroyAllWindows()  
+                result = result[0:result.index("{")]
+                result += "curly (\n" 
+                row_imgs = segmentize_row(curly_img)
+                for rowimg in row_imgs: 
+                    if rowimg is None:
+                        continue
 
-                result = "curly (\n" 
-                imgs = segmentize_recursive_nocolor(curly_img)
-                result += self.convert(imgs)
+                    # cv2.imshow(f'src_image', rowimg)
+                    # cv2.waitKey(0)
+                    # cv2.destroyAllWindows() 
+                    # segmentize the image
+                    imgs = segmentize_recursive_nocolor(rowimg)
+                    # actual conversion
+                    result += self.convert(imgs)
+                    result += "\n"
                 result += "\n)"
 
         # special case for equal.
