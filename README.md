@@ -19,8 +19,8 @@ The codebase is run through two primary python scripts, both of which need addit
 The main program runs our models against an inputted .png image containing a mathematical formula. The output of main is what our models identified as the text contained within the image file. To run main, do the following:
 - 'python main -p **img**'
   - **img** should contain the path to the image file that you with to test. Some default images we have supplied for our testing are as follows:
-    - 'python main -p input.png'
-    - 'python main -p input2.png'
+    - 'python main.py -p input.png'
+    - 'python main.py -p input2.png'
 
 ## tools
 The tools section of the code is utilized to allow for the datasets to be generated, the models to be trained, or the models to be evaluated on premade test cases. 
