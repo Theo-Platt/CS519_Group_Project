@@ -6,7 +6,7 @@ Semester long group project for CS-519-M01, taught by Dr. Huiping Cao in Spring 
 - Theoderic Platt <br/>
 
 # Prerequisites:
-- _os: upenSUSE Leap 15.4_ -- all testing and training were run on this version of linux.
+- _os: openSUSE Leap 15.4_ -- all testing and training were run on this version of linux.
 - _pip 23.0.1_       -- only if dependencies are not yet installed.
 - _Python 3.10.10_   -- all testing was conducted on this version of python.
 - _requirements.txt_ -- this file contains all dependencies, packages, and libraries needed.
