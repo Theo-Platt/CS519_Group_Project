@@ -6,7 +6,7 @@ import skimage
 
 #
 ## https://medium.com/@ageitgey/python-3-quick-tip-the-easy-way-to-deal-with-file-paths-on-windows-mac-and-linux-11a072b58d5f
-
+# https://kapernikov.com/tutorial-image-classification-with-scikit-learn/
 class HogTransformer(BaseEstimator, TransformerMixin):
     """
     Expects an array of 2d arrays (1 channel images)
